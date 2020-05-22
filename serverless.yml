@@ -1,0 +1,80 @@
+service: dashboard-graphql
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ap-southeast-2
+  endpointType: regional
+  role: arn:aws:iam::416527880812:role/lambda_basic_execution_with_read_only_access_to_SSM
+  deploymentBucket:
+    name: ${self:custom.bucketname}
+  stackTags:
+    CeR-Dashboard-MVP: ${self:service}
+    BusinessService: Faculty of Science
+    Department: Centre for eResearch
+    ProjectCode: N/A
+    WikiLink: N/A
+    Application: Research Hub Dashboard
+    CostCentre: N/A
+  environment:
+    # Environment variables available to all functions in this service
+    LEVEL: ${file(env/${self:provider.stage}.json):LEVEL}
+    PROJECT_DB_BASE_URL: ${file(env/${self:provider.stage}.json):PROJECT_DB_BASE_URL}
+    PROJECT_DB_API_KEY: ${file(env/${self:provider.stage}.json):PROJECT_DB_API_KEY}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - ssm:GetParameter
+        - ssm:GetParameters
+      Resource:
+        - "arn:aws:ssm:${self:provider.region}:416527880812:parameter/${self:provider.stage}/cer-dashboard/*"
+    - Effect: Allow
+      Action:
+        - kms:Decrypt
+      Resource:
+        - "arn:aws:kms:ap-southeast-2:416527880812:key/3cf7aeb4-ad8c-4505-a8e3-7d2a556e188d"
+  alb:
+    authorizers:
+      cognito-authorizer-uoapool:
+        type: 'cognito'
+        userPoolArn: 'arn:aws:cognito-idp:ap-southeast-2:416527880812:userpool/ap-southeast-2_pgErjyL4O'
+        userPoolClientId: 'lrju6v80vse4bbaesjvnr2ff0' # required
+        userPoolDomain: 'uoapool-sandbox' # required
+        scope: 'openid profile https://my-domain.auckland.ac.nz/angular-test'  
+
+package:
+  exclude:
+    - .git/**
+    - .vscode/*
+    - package.json
+    - package-lock.json
+    - env/*
+
+plugins:
+  # see https://www.npmjs.com/package/serverless-offline
+  - serverless-offline
+
+custom:
+  bucketname: serverless-shared-bucket-${self:provider.stage}
+  serverless-offline:
+    stage: ${self:provider.stage}
+    port: 4000
+
+functions:
+  graphql:
+    handler: handler.graphqlHandler
+    events:
+    - http:
+        path: graphql
+        method: post
+        cors: true
+        authorizer:
+          type: cognito_user_pools
+          arn: arn:aws:cognito-idp:ap-southeast-2:416527880812:userpool/ap-southeast-2_pgErjyL4O
+          identitySource: method.request.header.Authorization
+          scopes:
+            - openid
+            - profile
+            - https://my-domain.auckland.ac.nz/angular-test
+
