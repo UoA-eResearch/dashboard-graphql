@@ -1,0 +1,29 @@
+{
+  "name": "dashboard-graphql",
+  "version": "1.0.0",
+  "description": "dashboard graphql server",
+  "main": "handler.js",
+  "dependencies": {
+    "apollo-server-lambda": "^2.13.1",
+    "graphql": "^15.0.0",
+    "graphql-depth-limit": "^1.1.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^6.1.7"
+  },
+  "scripts": {
+    "start": "sls offline",
+    "debug": "export SLS_DEBUG=* && node --inspect ./node_modules/.bin/sls offline",
+    "deploy": "sls deploy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UoA-eResearch/dashboard-graphql.git"
+  },
+  "author": "Rose McColl",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/UoA-eResearch/dashboard-graphql/issues"
+  },
+  "homepage": "https://github.com/UoA-eResearch/dashboard-graphql#readme"
+}

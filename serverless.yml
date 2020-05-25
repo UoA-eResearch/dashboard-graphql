@@ -19,7 +19,7 @@ provider:
     CostCentre: N/A
   environment:
     # Environment variables available to all functions in this service
-    LEVEL: ${file(env/${self:provider.stage}.json):LEVEL}
+    ENV: ${self:provider.stage}
     PROJECT_DB_BASE_URL: ${file(env/${self:provider.stage}.json):PROJECT_DB_BASE_URL}
     PROJECT_DB_API_KEY: ${file(env/${self:provider.stage}.json):PROJECT_DB_API_KEY}
   iamRoleStatements:
@@ -59,7 +59,7 @@ custom:
   bucketname: serverless-shared-bucket-${self:provider.stage}
   serverless-offline:
     stage: ${self:provider.stage}
-    port: 4000
+    httpPort: 4000
 
 functions:
   graphql:
@@ -77,4 +77,7 @@ functions:
             - openid
             - profile
             - https://my-domain.auckland.ac.nz/angular-test
+    - http:
+        path: graphql
+        method: get
 
