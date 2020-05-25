@@ -1,15 +1,6 @@
-# type Query {
-#     getUserInfo(handle: String!): User!
-# }
-
-# type User {
-#     name: String!
-#     description: String!
-#     followers_count: Int!
-#     following: [String!]!
-#     topTweet: Tweet
-#     tweets(limit: Int!, nextToken: String): TweetConnection
-# }
+type Query {
+    hello: String
+}
 
 type Person {
     id: Int!
@@ -17,7 +8,6 @@ type Person {
     email: String
     end_date: String
     full_name: String
-    href: String
     identities: [Identity]
     last_modified: String
     notes: String
@@ -31,7 +21,6 @@ type Person {
 
 type Project {
     id: Int!
-    href: String
     description: String
     division: String
     end_date: String
@@ -43,7 +32,7 @@ type Project {
     todo: String
     actions: [Action]
     codes: [Code]
-    members: [Member]
+    members: [ProjectMember]
     properties: [ProjectProperty]
     research_outputs: [ResearchOutput]
     status: ProjectStatus
@@ -55,9 +44,8 @@ type Service {
     info: Object
 }
 
-type Member {
+type ProjectMember {
     id: Int!
-    href: String
     notes: String
     person: Person
     role: Role
@@ -65,9 +53,8 @@ type Member {
 
 type ProjectProperty {
     id: Int!
-    href: String
     propname: String
-    propvalue: String
+    propvalue: String   #kind of like project keywords
     timestamp: String
 }
 
@@ -79,42 +66,37 @@ type Action {
     id: Int!
     action_type: ActionType
     date: String
-    href: String
     notes: String
     person: Person
 }
 
 type ActionType {
     id: Int!
-    href: String
     name: String
 }
 
 type Code {
     id: Int!
     code: String
-    href: String
 }
 
 type ProjectStatus {
     id: Int!
-    href: String
     name: String
 }
 
 type PersonStatus {
     id: Int!
-    href: String
     name: String
 }
 
 type Role {
-
+    id: Int!
+    name: String
 }
 
 type Identity {
     id: Int!
-    href: String
     username: String
 }
 
@@ -123,19 +105,37 @@ type Division {
     division: String
     divisional_role: DivisionalRole
     external: String
-    href: String
 }
 
 type DivisionalRole {
     id: Int!
-    href: String
     name: String
 }
 
 type ResearchOutput {
-    
+
 }
 
 type ResearchVM {
+
+}
+
+type ResearchStorage {
+
+}
+
+type DropBox {
+
+}
+
+type Visualisation {
+
+}
+
+type Nectar {
+
+}
+
+type MyTardis {
 
 }
