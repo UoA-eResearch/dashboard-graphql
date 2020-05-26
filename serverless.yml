@@ -43,24 +43,19 @@ provider:
         userPoolDomain: 'uoapool-sandbox' # required
         scope: 'openid profile https://my-domain.auckland.ac.nz/angular-test'  
 
-package:
-  exclude:
-    - .git/**
-    - .vscode/*
-    - package.json
-    - package-lock.json
-    - env/*
-
 plugins:
+  - serverless-webpack
   # see https://www.npmjs.com/package/serverless-offline
   - serverless-offline
 
 custom:
   bucketname: serverless-shared-bucket-${self:provider.stage}
+  webpack: webpack.config.js
+  webpackIncludeModules: true
   serverless-offline:
     stage: ${self:provider.stage}
     httpPort: 4000
-
+  
 functions:
   graphql:
     handler: handler.graphqlHandler

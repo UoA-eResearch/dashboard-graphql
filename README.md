@@ -1,6 +1,7 @@
 # dashboard-graphql
 * AWS Serverless (Lambda) GraphQL Server for the Research Hub Dashboard
 * Built using the [Serverless Framework](https://serverless.com/)
+* Packaged using webpack
 * Supports debugging with Visual Studio Code
 * TO DO: Add support for unit testing
 
