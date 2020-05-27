@@ -1,4 +1,6 @@
-const typeDefs = `
+import { gql } from 'apollo-server-lambda';
+
+const typeDefs = gql`
     type Query {
         hello: String
     }
@@ -55,7 +57,7 @@ const typeDefs = `
     type ProjectProperty {
         id: Int!
         propname: String
-        propvalue: String   #kind of like project keywords
+        propvalue: String
         timestamp: String
     }
 
