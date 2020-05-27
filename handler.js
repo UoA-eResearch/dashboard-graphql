@@ -1,30 +1,39 @@
 import { ApolloServer } from 'apollo-server-lambda';
-import depthLimit from 'graphql-depth-limit'; // deals with the problem of circular references
-//import queryComplexity from 'graphql-query-complexity';
+// deals with the problem of circular references
+import depthLimit from 'graphql-depth-limit';
+// import queryComplexity from 'graphql-query-complexity';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: ({ event, context }) => ({   //enables the request and function context etc to be passed to schema resolvers
+  // enables the request and function context to be passed to schema resolvers
+  context: ({ event, context }) => ({
     headers: event.headers,
     functionName: context.functionName,
     event,
     context,
   }),
   validationRules: [
+    // kind of arbitrary depth limit.. should think more about this
+    // you can also specify fields to ignore
+    // and get a map of the depths for each operation
     depthLimit(
-      5,            //kind of arbitrary depth limit.. should think more about this
-      { ignore: [] }, //you can specify fields to ignore
-      depths => console.log(depths) //get a map of the depths for each operation
+      5,
+      { ignore: [] },
+      depths => console.log('Query depths: ' + depths)
     ),
     // queryComplexity({
     //   maximumComplexity: 2000,
     //   variables: {},
-    //   onComplete: (complexity) => { info(`Determined query complexity: ${complexity}`) },
+    //   onComplete: (complexity) => {
+    //  info(`Determined query complexity: ${complexity}`)
+    //  },
     //   createError: (max, actual) =>
-    //     new GqlError(`Query is too complex: ${actual}. Maximum allowed complexity: ${max}`)
+    //     new GqlError(
+    //      `Query is too complex: ${actual}. Max allowed complexity: ${max}`
+    //     )
     // })
   ],
   formatError: error => {
@@ -36,16 +45,16 @@ const server = new ApolloServer({
     return response;
   },
   playground: {
-    endpoint: "http://localhost:4000/dev/graphql",
+    endpoint: 'http://localhost:4000/dev/graphql',
     settings: {
-      'schema.polling.interval': 60000
-    }
-  }
+      'schema.polling.interval': 60000,
+    },
+  },
 });
 
 exports.graphqlHandler = server.createHandler({
   cors: {
     origin: '*',
-    methods: ['GET', 'POST']
+    methods: ['GET', 'POST'],
   },
 });
