@@ -1,7 +1,7 @@
 # dashboard-graphql
 * AWS Serverless (Lambda) GraphQL Server for the Research Hub Dashboard
 * Built using the [Serverless Framework](https://serverless.com/)
-* Packaged using webpack
+* Packaged with Webpack using the serverless-bundle plugin
 * Supports debugging with Visual Studio Code
 * TO DO: Add support for unit testing
 
@@ -27,6 +27,12 @@ npm start
 
 ## Debug Locally
 * Inside Visual Studio Code hit `F5` and select `Debug` as config file. Attach breakpoints as desired.
+
+## Code Linting
+* To lint your code with ESLint:
+```
+npm run pretest
+```
 
 ## Deploy to AWS
 * To deploy to AWS execute:

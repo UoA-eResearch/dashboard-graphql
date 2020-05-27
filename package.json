@@ -5,24 +5,19 @@
   "main": "handler.js",
   "dependencies": {
     "apollo-server-lambda": "^2.13.1",
-    "core-js": "^3.6.5",
     "graphql": "^15.0.0",
     "graphql-depth-limit": "^1.1.0",
     "graphql-query-complexity": "^0.6.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/preset-env": "^7.9.6",
-    "babel-loader": "^8.1.0",
-    "serverless-offline": "^6.1.7",
-    "serverless-webpack": "^5.3.2",
-    "webpack": "^4.43.0",
-    "webpack-node-externals": "^1.7.2"
+    "serverless-bundle": "^1.6.0",
+    "serverless-offline": "^6.1.7"
   },
   "scripts": {
     "start": "sls offline",
     "debug": "export SLS_DEBUG=* && node --inspect ./node_modules/.bin/sls offline",
-    "deploy": "sls deploy"
+    "deploy": "sls deploy",
+    "pretest": "eslint --ignore-path .gitignore ."
   },
   "repository": {
     "type": "git",

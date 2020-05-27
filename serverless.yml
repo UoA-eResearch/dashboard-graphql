@@ -44,14 +44,12 @@ provider:
         scope: 'openid profile https://my-domain.auckland.ac.nz/angular-test'  
 
 plugins:
-  - serverless-webpack
+  - serverless-bundle
   # see https://www.npmjs.com/package/serverless-offline
   - serverless-offline
 
 custom:
   bucketname: serverless-shared-bucket-${self:provider.stage}
-  webpack: webpack.config.js
-  webpackIncludeModules: true
   serverless-offline:
     stage: ${self:provider.stage}
     httpPort: 4000
