@@ -6,7 +6,8 @@
   "dependencies": {
     "apollo-server-lambda": "^2.13.1",
     "graphql": "^15.0.0",
-    "graphql-depth-limit": "^1.1.0"
+    "graphql-depth-limit": "^1.1.0",
+    "node-fetch": "^2.6.0"
   },
   "devDependencies": {
     "serverless-bundle": "^1.6.0",
