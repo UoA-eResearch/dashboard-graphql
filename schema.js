@@ -19,10 +19,17 @@ const typeDefs = gql`
     notes: String
     phone: String
     preferred_name: String
-    projects: [Project]
+    projects: [ProjectOfPerson]
     properties: [PersonProperty]
     start_date: String
     status: PersonStatus
+  }
+
+  type ProjectOfPerson {
+    id: Int!
+    notes: String
+    project: Project
+    role: Role
   }
 
   type Project {
@@ -31,7 +38,7 @@ const typeDefs = gql`
     description: String
     division: String
     end_date: String
-    external_references: ExternalReference
+    external_references: [ExternalReference]
     last_modified: String
     next_review_date: String,
     notes: String

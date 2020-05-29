@@ -16,36 +16,47 @@ const getData = async(url) => {
   }
 };
 
-// const getPersonInfo = async(args) => {
-//   const url = baseUrl + '/person/' + args.id; 
-//   const personInfo = await getData(url, headers);
-//   console.log(personInfo);
-//   try {
-//     personInfo.divisions = await getData(baseUrl + personInfo.divisions.href,
-//       headers);
-//     personInfo.identities = await getData(baseUrl + personInfo.identities.href,
-//       headers);
-//     personInfo.projects = await getData(baseUrl + personInfo.projects.href,
-//       headers);
-//     personInfo.properties = await getData(baseUrl + personInfo.properties.href,
-//       headers);
-//   } catch {
-//     console.log('oops');
-//   }
-
-//   return personInfo;
-// };
-
 export const resolvers = {
   Query: {
     hello: () => 'Hello world!',
-    user: (parent, args) => {
-      return getData(baseUrl + 'person/findByIdentity/' + args.username);
-    },
-    person: (parent, args) => {
-      return getData(baseUrl + '/person/' + args.id);
-    },
+    user: (parent, args) => getData(
+      baseUrl + 'person/findByIdentity/' + args.username),
+    person: (parent, args) => getData(baseUrl + '/person/' + args.id),
+    project: (parent, args) => getData(baseUrl + '/project/' + args.id),
   },
-  // TODO: chain resolvers here...(divisions, identities, projects, etc....)
-  // https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-chains
+  Person: {
+    divisions: (parent) => getData(baseUrl + parent.divisions.href),
+    identities: (parent) => getData(baseUrl + parent.identities.href),
+    projects: (parent) => getData(
+      baseUrl + parent.projects.href + '?expand=role'),
+    properties: (parent) => getData(baseUrl + parent.properties.href),
+    status: (parent) => getData(baseUrl + parent.status.href),
+  },
+  Division: {
+    divisional_role: (parent) => getData(baseUrl + parent.divisional_role.href),
+  },
+  ProjectOfPerson: {
+    project: (parent) => getData(baseUrl + parent.project.href),
+    // role: (parent) => getData(baseUrl + parent.role.href), *use expand*
+  },
+  Project: {
+    external_references: (parent, args) => getData(
+      baseUrl + parent.external_references.href),
+    actions: (parent, args) => getData(baseUrl + parent.actions.href),
+    codes: (parent) => getData(baseUrl + parent.codes.href),
+    members: (parent) => getData(
+      baseUrl + parent.members.href + '?expand=role'),
+    properties: (parent) => getData(baseUrl + parent.properties.href),
+    research_outputs: (parent) => getData(
+      baseUrl + parent.research_outputs.href),
+    status: (parent) => getData(baseUrl + parent.status.href),
+    services: (parent) => getData(baseUrl + parent.services.href),
+  },
+  Action: {
+    action_type: (parent) => getData(baseUrl + parent.action_type.href),
+  },
+  ProjectMember: {
+    person: (parent) => getData(baseUrl + parent.person.href),
+    // role: (parent) => getData(baseUrl + parent.role.href), *use expand*
+  },
 };
