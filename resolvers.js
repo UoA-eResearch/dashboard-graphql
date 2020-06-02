@@ -9,8 +9,7 @@ const headers = {
 const getData = async(url) => {
   try {
     const response = await fetch(url, {headers: headers});
-    const json = await response.json();
-    return json;
+    return response.json();
   } catch (error) {
     console.log(error);
   }
@@ -18,11 +17,16 @@ const getData = async(url) => {
 
 export const resolvers = {
   Query: {
-    hello: () => 'Hello world!',
     user: (parent, args) => getData(
       baseUrl + 'person/findByIdentity/' + args.username),
     person: (parent, args) => getData(baseUrl + '/person/' + args.id),
     project: (parent, args) => getData(baseUrl + '/project/' + args.id),
+    researchvm: (parent, args) => getData(baseUrl + '/vm/' + args.id),
+    researchstorage: (parent, args) => getData(
+      baseUrl + '/researchdrive/' + args.id),
+    dropbox: (parent, args) => getData(baseUrl + '/dropbox/' + args.id),
+    visualisation: (parent, args) => getData(baseUrl + '/vis/' + args.id),
+    nectar: (parent, args) => getData(baseUrl + '/nectar/' + args.id),
   },
   Person: {
     divisions: (parent) => getData(baseUrl + parent.divisions.href),
@@ -49,8 +53,8 @@ export const resolvers = {
     properties: (parent) => getData(baseUrl + parent.properties.href),
     research_outputs: (parent) => getData(
       baseUrl + parent.research_outputs.href),
-    status: (parent) => getData(baseUrl + parent.status.href),
     services: (parent) => getData(baseUrl + parent.services.href),
+    status: (parent) => getData(baseUrl + parent.status.href),
   },
   Action: {
     action_type: (parent) => getData(baseUrl + parent.action_type.href),
@@ -58,5 +62,11 @@ export const resolvers = {
   ProjectMember: {
     person: (parent) => getData(baseUrl + parent.person.href),
     // role: (parent) => getData(baseUrl + parent.role.href), *use expand*
+  },
+  ResearchOutput: {
+    researchoutput: (parent) => getData(baseUrl + parent.researchoutput.href),
+  },
+  ResearchOutputInfo: {
+    type: (parent) => getData(baseUrl + parent.type.href),
   },
 };

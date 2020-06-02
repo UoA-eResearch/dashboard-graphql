@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "sls offline",
-    "debug": "export SLS_DEBUG=* && node --inspect ./node_modules/.bin/sls offline",
+    "debug": "SET SLS_DEBUG=* && node --inspect %AppData%/npm/node_modules/serverless/bin/serverless offline",
     "deploy": "sls deploy",
     "pretest": "eslint --ignore-path .gitignore ."
   },

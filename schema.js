@@ -2,10 +2,14 @@ import { gql } from 'apollo-server-lambda';
 
 const typeDefs = gql`
   type Query {
-    hello: String
     user(username: String!): Person
     person(id: Int!): Person
     project(id: Int!): Project
+    dropbox(id: Int!): DropBox
+    visualisation(id: Int!): Visualisation
+    researchvm(id: Int!): [ResearchVMHistory]
+    researchstorage(id: Int!): [ResearchStorageHistory]
+    nectar(id: Int!): [NectarHistory]
   }
 
   type Person {
@@ -35,7 +39,8 @@ const typeDefs = gql`
   type Project {
     id: Int!
     creation_date: String
-    description: String
+    # keep this out until more fine-grained auth is implemented:
+    # description: String
     division: String
     end_date: String
     external_references: [ExternalReference]
@@ -52,12 +57,15 @@ const typeDefs = gql`
     properties: [ProjectProperty]
     research_outputs: [ResearchOutput]
     status: ProjectStatus
-    services: [Service]
+    services: ProjectServices
   }
 
-  type Service {
-    type: String
-    info: String
+  type ProjectServices {
+    dropbox: [DropBox]
+    nectar: [Nectar]
+    research_drive: [ResearchStorage]
+    vis: [Visualisation]
+    vm: [ResearchVM]
   }
 
   type ProjectMember {
@@ -141,6 +149,11 @@ const typeDefs = gql`
 
   type ResearchOutput {
     id: Int!
+    researchoutput: ResearchOutputInfo
+  }
+
+  type ResearchOutputInfo {
+    id: Int!
     date_reported: String
     description: String
     doi: String
@@ -154,7 +167,7 @@ const typeDefs = gql`
   }
 
   type ResearchVM {
-    id: Int! # called vm_id in API
+    id: Int!
     name: String
     cpus: Int
     date: String
@@ -165,13 +178,13 @@ const typeDefs = gql`
     state: String
     total_disk_gb: Float
     uuid: String
-		# first_day: String
-    # last_day: String
-    # project_code: String
+		first_day: String
+    last_day: String
+    project_code: String
   }
 
   type ResearchStorage {
-    id: Int!  # called drive_id in API
+    id: Int!
     name: String
     allocated_gb: Int
     date: String
@@ -181,9 +194,9 @@ const typeDefs = gql`
     num_files: Int
     percentage_used: Float
     used_gb: Float
-		# first_day: String
-    # last_day: String
-    # project_code: String
+		first_day: String
+    last_day: String
+    project_code: String
   }
 
   type DropBox {
@@ -193,9 +206,9 @@ const typeDefs = gql`
     editor_group: String,
     team_folder_id_dbx: String
     viewer_group: String
-		# first_day: String
-    # last_day: String
-    # project_code: String
+		first_day: String
+    last_day: String
+    project_code: String
   }
 
   type Visualisation {
@@ -207,9 +220,9 @@ const typeDefs = gql`
 		video_based_vis: Int
 		vive: Int
 		web_based_vis: Int
-		# first_day: String
-    # last_day: String
-    # project_code: String
+		first_day: String
+    last_day: String
+    project_code: String
   }
 
   type Nectar {
@@ -232,29 +245,65 @@ const typeDefs = gql`
     ram: Int
     ram_optimised: Int
     router: Int
-    service_id: Int
     shared_fs: Int
     status: String
     volume: Int
-		# first_day: String
-    # last_day: String
-    # project_code: String
+		first_day: String
+    last_day: String
+    project_code: String
   }
 
-  type MyTardis {
-    id: Int!
-    project_raid: String
-    # first_day: String
-    # last_day: String
-    # project_code: String
-    # experiments: [MyTardisExperiment]
+  type ResearchVMHistory {
+    vm_id: Int!
+    name: String
+    cpus: Int
+    date: String
+    deleted: Int
+    host: String
+    memory_gb: Float
+    os: String
+    state: String
+    total_disk_gb: Float
+    uuid: String
   }
 
-  # type MyTardisExperiment {
-  #   id: Int!
-  #   experiment_raid: String
-  #   experiment_url: String
-  # }
+  type ResearchStorageHistory {
+    drive_id: Int!
+    name: String
+    allocated_gb: Int
+    date: String
+    deleted: Int
+    division: String
+    free_gb: Float
+    num_files: Int
+    percentage_used: Float
+    used_gb: Float
+  }
+
+  type NectarHistory {
+    service_id: Int!
+    name: String
+    allocation_id_ntr: Int
+    core: Int
+    cpu_optimised: Int
+    database_server: Int
+    database_storage: Int
+    date: String
+    deleted: Int
+    division: String
+    floating_ip: Int
+    instance: Int
+    load_balancer: Int
+    network: Int
+    object_store: Int
+    project_id_ntr: String
+    ram: Int
+    ram_optimised: Int
+    router: Int
+    shared_fs: Int
+    status: String
+    volume: Int
+  }
 `;
 
 export { typeDefs };
