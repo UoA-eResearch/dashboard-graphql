@@ -18,5 +18,21 @@
             },
             "port": 9229
         },
+        {
+            "name": "Debug Linux",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceRoot}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "debug-linux"
+            ],
+            "env": {
+                // Here you define any env vars that should be set locally.
+                // They will overwrite the ones coming from your serverless.yml
+            },
+            "port": 9229
+        },
     ]
 }

@@ -26,7 +26,7 @@ npm start
 ```
 
 ## Debug Locally
-* Inside Visual Studio Code hit `F5` and select `Debug` as config file. Attach breakpoints as desired.
+* Inside Visual Studio Code hit `F5` and select `Debug` as config file (this config is for Windows. If you are using Linux, select the `Debug Linux` config). Attach breakpoints as desired.
 
 ## Code Linting
 * To lint your code with ESLint:
