@@ -5,11 +5,11 @@ const typeDefs = gql`
     user(username: String!): Person
     person(id: Int!): Person
     project(id: Int!): Project
-    dropbox(id: Int!): DropBox
-    visualisation(id: Int!): Visualisation
-    researchvm(id: Int!): [ResearchVMHistory]
-    researchstorage(id: Int!): [ResearchStorageHistory]
-    nectar(id: Int!): [NectarHistory]
+    dropbox(id: Int!): DropBoxService
+    visualisation(id: Int!): VisualisationService
+    researchvm(id: Int!): ResearchVMService
+    researchstorage(id: Int!): ResearchStorageService
+    nectar(id: Int!): NectarService
   }
 
   type Person {
@@ -61,11 +61,12 @@ const typeDefs = gql`
   }
 
   type ProjectServices {
-    dropbox: [DropBox]
-    nectar: [Nectar]
-    research_drive: [ResearchStorage]
-    vis: [Visualisation]
-    vm: [ResearchVM]
+    # The set of services associated with a project
+    dropbox: [DropBoxProject]
+    nectar: [NectarProject]
+    research_drive: [ResearchStorageProject]
+    vis: [VisualisationProject]
+    vm: [ResearchVMProject]
   }
 
   type ProjectMember {
@@ -166,7 +167,7 @@ const typeDefs = gql`
     name: String
   }
 
-  type ResearchVM {
+  type ResearchVMProject {
     id: Int!
     name: String
     cpus: Int
@@ -183,7 +184,7 @@ const typeDefs = gql`
     project_code: String
   }
 
-  type ResearchStorage {
+  type ResearchStorageProject {
     id: Int!
     name: String
     allocated_gb: Int
@@ -199,7 +200,7 @@ const typeDefs = gql`
     project_code: String
   }
 
-  type DropBox {
+  type DropBoxProject {
     id: Int!
     name: String
     deleted: Int
@@ -211,7 +212,7 @@ const typeDefs = gql`
     project_code: String
   }
 
-  type Visualisation {
+  type VisualisationProject {
     id: Int!
     name: String
     deleted: Int
@@ -225,7 +226,7 @@ const typeDefs = gql`
     project_code: String
   }
 
-  type Nectar {
+  type NectarProject {
     id: Int!
     name: String
     allocation_id_ntr: Int
@@ -253,8 +254,30 @@ const typeDefs = gql`
     project_code: String
   }
 
-  type ResearchVMHistory {
-    vm_id: Int!
+  type DropBoxService {
+    id: Int!
+    name: String
+    deleted: Int
+    editor_group: String,
+    team_folder_id_dbx: String
+    viewer_group: String
+    projects: [ServiceProject]
+  }
+
+  type VisualisationService {
+    id: Int!
+    name: String
+    deleted: Int
+		gear_vr: Int
+		holo_lens: Int
+		video_based_vis: Int
+		vive: Int
+		web_based_vis: Int
+    projects: [ServiceProject]
+  }
+
+  type ResearchVMService {
+    id: Int!
     name: String
     cpus: Int
     date: String
@@ -265,10 +288,11 @@ const typeDefs = gql`
     state: String
     total_disk_gb: Float
     uuid: String
+    projects: [ServiceProject]
   }
 
-  type ResearchStorageHistory {
-    drive_id: Int!
+  type ResearchStorageService {
+    id: Int!
     name: String
     allocated_gb: Int
     date: String
@@ -278,10 +302,11 @@ const typeDefs = gql`
     num_files: Int
     percentage_used: Float
     used_gb: Float
+    projects: [ServiceProject]
   }
 
-  type NectarHistory {
-    service_id: Int!
+  type NectarService {
+    id: Int!
     name: String
     allocation_id_ntr: Int
     core: Int
@@ -303,6 +328,16 @@ const typeDefs = gql`
     shared_fs: Int
     status: String
     volume: Int
+    projects: [ServiceProject]
+  }
+
+  type ServiceProject {
+    # A project associated with a service
+    id: Int!
+    code: String
+    first_day: String
+    last_day: String
+    project: Project
   }
 `;
 

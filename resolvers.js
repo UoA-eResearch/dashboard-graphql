@@ -21,12 +21,51 @@ export const resolvers = {
       baseUrl + 'person/findByIdentity/' + args.username),
     person: (parent, args) => getData(baseUrl + '/person/' + args.id),
     project: (parent, args) => getData(baseUrl + '/project/' + args.id),
-    researchvm: (parent, args) => getData(baseUrl + '/vm/' + args.id),
-    researchstorage: (parent, args) => getData(
-      baseUrl + '/researchdrive/' + args.id),
+    researchvm: async(parent, args) => {
+      // this returns entire vm history so need to return only the basic data
+      let dataList = await getData(baseUrl + '/vm/' + args.id);
+      let data;
+      if (dataList.length > 0) {
+        data = dataList[0];
+        // the id field is named vm_id so add id field to match schema
+        // this makes data more consistent for front end
+        if (data.hasOwnProperty('vm_id')) {
+          data['id'] = data.vm_id;
+        }
+      }
+      return data;
+    },
+    researchstorage: async(parent, args) => {
+      // this returns entire drive history so need to return only the basic data
+      let dataList = await getData(baseUrl + '/researchdrive/' + args.id);
+      let data;
+      if (dataList.length > 0) {
+        data = dataList[0];
+        // the id field is named drive_id so add id field to match schema
+        // this makes data more consistent for front end
+        if (data.hasOwnProperty('drive_id')) {
+          data['id'] = data.drive_id;
+        }
+      }
+      return data;
+    },
+    nectar: async(parent, args) => {
+      // this returns entire nectar history so need to return only
+      // the basic data
+      let dataList = await getData(baseUrl + '/nectar/' + args.id);
+      let data;
+      if (dataList.length > 0) {
+        data = dataList[0];
+        // the id field is named service_id so add id field to match schema
+        // this makes data more consistent for front end
+        if (data.hasOwnProperty('service_id')) {
+          data['id'] = data.service_id;
+        }
+      }
+      return data;
+    },
     dropbox: (parent, args) => getData(baseUrl + '/dropbox/' + args.id),
     visualisation: (parent, args) => getData(baseUrl + '/vis/' + args.id),
-    nectar: (parent, args) => getData(baseUrl + '/nectar/' + args.id),
   },
   Person: {
     divisions: (parent) => getData(baseUrl + parent.divisions.href),
@@ -68,5 +107,25 @@ export const resolvers = {
   },
   ResearchOutputInfo: {
     type: (parent) => getData(baseUrl + parent.type.href),
+  },
+  ResearchVMService: {
+    projects: (parent) => getData(baseUrl + '/vm/' + parent.id + '/project'),
+  },
+  ResearchStorageService: {
+    projects: (parent) => getData(
+      baseUrl + '/researchdrive/' + parent.id + '/project'),
+  },
+  NectarService: {
+    projects: (parent) => getData(
+      baseUrl + '/nectar/' + parent.id + '/project'),
+  },
+  DropBoxService: {
+    projects: (parent) => getData(baseUrl + parent.href + '/project'),
+  },
+  VisualisationService: {
+    projects: (parent) => getData(baseUrl + parent.href + '/project'),
+  },
+  ServiceProject: {
+    project: (parent) => getData(baseUrl + parent.project.href),
   },
 };
