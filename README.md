@@ -34,6 +34,12 @@ npm start
 npm run pretest
 ```
 
+## Unit Tests
+* To run unit tests with Jest:
+```
+npm test
+```
+
 ## Deploy to AWS
 * To deploy to AWS execute:
 ```

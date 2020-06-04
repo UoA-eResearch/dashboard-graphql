@@ -18,7 +18,7 @@
     "build": "sls webpack",
     "debug-linux": "export SLS_DEBUG=* && node --inspect ./node_modules/.bin/sls offline",
     "debug": "SET SLS_DEBUG=* && node --inspect %AppData%/npm/node_modules/serverless/bin/serverless offline",
-    "deploy": "npm run test && sls deploy",
+    "deploy": "npm test && sls deploy",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "serverless-bundle test"
   },
