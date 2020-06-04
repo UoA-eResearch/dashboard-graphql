@@ -1,4 +1,17 @@
-service: dashboard-graphql
+service: cer-dashboard-graphql
+
+custom:
+  bucketBaseName: serverless-shared-bucket
+  Department: "Centre for eResearch"
+  Environment: "${self:provider.stage}"
+  BusinessService: "Faculty of Science"
+  Application: "CeR Research Dashboard"
+  ProjectCode: N/A
+  CostCentre: N/A
+  WikiLink: N/A
+  serverless-offline:
+    stage: ${self:provider.stage}
+    httpPort: 4000
 
 provider:
   name: aws
@@ -7,16 +20,24 @@ provider:
   region: ap-southeast-2
   endpointType: regional
   role: arn:aws:iam::416527880812:role/lambda_basic_execution_with_read_only_access_to_SSM
-  deploymentBucket:
-    name: ${self:custom.bucketname}
+  tags:
+    Department: ${self:custom.Department}
+    Environment: ${self:custom.Environment}
+    BusinessService: ${self:custom.BusinessService}
+    Application: ${self:custom.Application}
+    ProjectCode: ${self:custom.ProjectCode}
+    CostCentre: ${self:custom.CostCentre}
+    WikiLink: ${self:custom.WikiLink}
   stackTags:
-    CeR-Dashboard-MVP: ${self:service}
-    BusinessService: Faculty of Science
-    Department: Centre for eResearch
-    ProjectCode: N/A
-    WikiLink: N/A
-    Application: Research Hub Dashboard
-    CostCentre: N/A
+    Department: ${self:custom.Department}
+    Environment: ${self:custom.Environment}
+    BusinessService: ${self:custom.BusinessService}
+    Application: ${self:custom.Application}
+    ProjectCode: ${self:custom.ProjectCode}
+    CostCentre: ${self:custom.CostCentre}
+    WikiLink: ${self:custom.WikiLink}
+  deploymentBucket:
+    name: ${self:custom.bucketBaseName}-${self:provider.stage}
   environment:
     # Environment variables available to all functions in this service
     ENV: ${self:provider.stage}
@@ -34,26 +55,19 @@ provider:
         - kms:Decrypt
       Resource:
         - "arn:aws:kms:ap-southeast-2:416527880812:key/3cf7aeb4-ad8c-4505-a8e3-7d2a556e188d"
-  alb:
+  apiGateway: # API Gateway global config
     authorizers:
       cognito-authorizer-uoapool:
         type: 'cognito'
-        userPoolArn: 'arn:aws:cognito-idp:ap-southeast-2:416527880812:userpool/ap-southeast-2_pgErjyL4O'
+        userPoolArn: 'arn:aws:cognito-idp:ap-southeast-2:416527880812:userpool/ap-southeast-2_pgErjyL4O' # required
         userPoolClientId: 'lrju6v80vse4bbaesjvnr2ff0' # required
         userPoolDomain: 'uoapool-sandbox' # required
         scope: 'openid profile https://my-domain.auckland.ac.nz/angular-test'  
 
 plugins:
   - serverless-bundle
-  # see https://www.npmjs.com/package/serverless-offline
   - serverless-offline
-
-custom:
-  bucketname: serverless-shared-bucket-${self:provider.stage}
-  serverless-offline:
-    stage: ${self:provider.stage}
-    httpPort: 4000
-  
+ 
 functions:
   graphql:
     handler: handler.graphqlHandler
@@ -66,10 +80,7 @@ functions:
           type: cognito_user_pools
           arn: arn:aws:cognito-idp:ap-southeast-2:416527880812:userpool/ap-southeast-2_pgErjyL4O
           identitySource: method.request.header.Authorization
-          scopes:
-            - openid
-            - profile
-            - https://my-domain.auckland.ac.nz/angular-test
+          scopes: ${file(env/${self:provider.stage}.json):OAUTH_SCOPES}
     - http:
         path: graphql
         method: get

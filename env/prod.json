@@ -1,5 +1,8 @@
 {
     "NODE_ENV": "production",
     "PROJECT_DB_BASE_URL": "https://api.auckland.ac.nz/service/eresearch-project/v1",
-    "PROJECT_DB_API_KEY": "TBD"
+    "PROJECT_DB_API_KEY": "TBD",
+    "OAUTH_SCOPES": [
+        "TBD"
+    ]
 }

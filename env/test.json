@@ -1,4 +1,7 @@
 {
     "PROJECT_DB_BASE_URL": "https://api.test.auckland.ac.nz/service/eresearch-project/v1",
-    "PROJECT_DB_API_KEY": "${ssm:/dev/cer-dashboard/projectdb_apikey_test~true}"
+    "PROJECT_DB_API_KEY": "${ssm:/dev/cer-dashboard/projectdb_apikey_test~true}",
+    "OAUTH_SCOPES": [
+        "TBD"
+    ]
 }

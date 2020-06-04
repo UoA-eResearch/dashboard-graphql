@@ -39,6 +39,32 @@ npm run pretest
 ```
 npm run deploy
 ```
+Note: API Gateway API mapping needs to be configured after first deployment.
+- using AWS CLI:
+```
+aws apigateway create-base-path-mapping
+--domain-name <value>
+--base-path <value>
+--rest-api-id <value>
+--stage <value>
+```
+Example:
+```
+aws apigateway create-base-path-mapping
+--domain-name apigw.sandbox.amazon.auckland.ac.nz
+--base-path dev-cer-dashboard-graphql
+--rest-api-id 69b7bd8o16
+--stage dev
+```
+The graphql endpoint under the domain mapping will be:
+https://apigw.sandbox.amazon.auckland.ac.nz/dev-cer-dashboard-graphql/graphql
+
+To delete an API mapping:
+```
+aws apigateway delete-base-path-mapping
+--domain-name <value>
+--base-path <value>
+```
 
 ### Deploy to a different stage
 * By default the above command deploys to the `dev` stage
