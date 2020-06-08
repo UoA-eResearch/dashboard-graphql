@@ -34,11 +34,12 @@ npm start
 npm run pretest
 ```
 
-## Unit Tests
-* To run unit tests with Jest:
+## Unit/Integration Tests
+* To run unit/integration tests with Jest:
 ```
 npm test
 ```
+NOTE: Jest is set up to get required env variables like the eResearch project API url and API key. This is done by first copying the generated env variables into the .serverless folder in a .env file. Then when Jest loads up, the setupFilesAfterEnv config (see package.json) points to the jest-preload-env.js file, where the dotenv package is used to load the variables from the .env file into the current environment.
 
 ## Deploy to AWS
 * To deploy to AWS execute:

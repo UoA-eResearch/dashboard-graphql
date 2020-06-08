@@ -10,7 +10,9 @@
     "graphql-depth-limit": "^1.1.0"
   },
   "devDependencies": {
+    "@unly/serverless-env-copy-plugin": "^1.0.4",
     "apollo-server-testing": "^2.14.2",
+    "dotenv": "^8.2.0",
     "serverless-bundle": "^1.6.0",
     "serverless-offline": "^6.1.7"
   },
@@ -21,7 +23,12 @@
     "debug": "SET SLS_DEBUG=* && node --inspect %AppData%/npm/node_modules/serverless/bin/serverless offline",
     "deploy": "npm test && sls deploy",
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "serverless-bundle test"
+    "test": "SET NODE_ENV=test && sls dotenv && serverless-bundle test"
+  },
+  "jest": {
+    "setupFilesAfterEnv": [
+      "./jest-preload-env.js"
+    ]
   },
   "repository": {
     "type": "git",

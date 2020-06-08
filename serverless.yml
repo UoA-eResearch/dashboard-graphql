@@ -65,8 +65,9 @@ provider:
         scope: 'openid profile https://my-domain.auckland.ac.nz/angular-test'  
 
 plugins:
-  - serverless-bundle
-  - serverless-offline
+  - serverless-bundle # Must be first, see https://github.com/AnomalyInnovations/serverless-bundle
+  - serverless-offline # See https://github.com/dherault/serverless-offline
+  - '@unly/serverless-env-copy-plugin' # See https://github.com/UnlyEd/serverless-env-copy-plugin
  
 functions:
   graphql:
