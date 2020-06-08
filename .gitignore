@@ -7,3 +7,6 @@ jspm_packages
 
 # Builds
 .webpack
+
+# Test coverage reports
+coverage

@@ -23,7 +23,7 @@
     "debug": "SET SLS_DEBUG=* && node --inspect %AppData%/npm/node_modules/serverless/bin/serverless offline",
     "deploy": "npm test && sls deploy",
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "SET NODE_ENV=test && sls dotenv && serverless-bundle test"
+    "test": "SET NODE_ENV=test && sls dotenv && serverless-bundle test --coverage"
   },
   "jest": {
     "setupFilesAfterEnv": [
