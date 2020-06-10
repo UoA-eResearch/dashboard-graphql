@@ -1,0 +1,18 @@
+{
+    "config": {
+      "url": "http://localhost:4000/dev/graphql",
+      "name": "Testing the dashboard graphql server",
+      "selectedQueries": ["person"],
+      "queryFile": true,
+      "withMutations": false,
+      "duration": 5,
+      "arrivalRate": 10,
+      "withOutput": true,
+      "headers": {}
+    },
+    "args": {
+      "person": {
+        "id": 1
+      }
+    }
+  }

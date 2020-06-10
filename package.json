@@ -14,7 +14,13 @@
     "apollo-server-testing": "^2.14.2",
     "dotenv": "^8.2.0",
     "serverless-bundle": "^1.6.0",
-    "serverless-offline": "^6.1.7"
+    "serverless-offline": "^6.1.7",
+    "artillery": "^1.6.0-27",
+    "fs-extra": "^7.0.1",
+    "inquirer": "^6.2.2",
+    "minimist": "^1.2.0",
+    "easygraphql-load-tester": "^0.3.8",
+    "ora": "^3.2.0"
   },
   "scripts": {
     "start": "sls offline",
@@ -23,7 +29,8 @@
     "debug": "SET SLS_DEBUG=* && node --inspect %AppData%/npm/node_modules/serverless/bin/serverless offline",
     "deploy": "npm test && sls deploy",
     "pretest": "eslint --ignore-path .gitignore .",
-    "test": "SET NODE_ENV=test && sls dotenv && serverless-bundle test --coverage"
+    "test": "SET NODE_ENV=test && sls dotenv && serverless-bundle test --coverage",
+    "load-test": "npx ./tests/load-testing/bin/easygraphql-lt.js ./tests/load-testing/config.json"
   },
   "jest": {
     "setupFilesAfterEnv": [
