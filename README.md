@@ -42,6 +42,9 @@ npm test
 ```
 NOTE: Jest is set up to get required env variables like the eResearch project API url and API key. This is done by first copying the generated env variables into the .serverless folder in a .env file. Then when Jest loads up, the setupFilesAfterEnv config (see package.json) points to the jest-preload-env.js file, where the dotenv package is used to load the variables from the .env file into the current environment. For further Jest configuration options, see https://jestjs.io/docs/en/configuration.
 
+## Load Testing
+* EasyGraphQL and Artillery have been set up in this project to run load testing on the graphql server. You can test the server locally, or point at the deployed server on AWS. See the README in the tests/load-testing folder to see how to configure and run load testing.
+
 ## Deploy to AWS
 * To deploy to AWS execute:
 ```
