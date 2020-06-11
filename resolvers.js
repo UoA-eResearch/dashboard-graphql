@@ -85,6 +85,9 @@ export const resolvers = {
     action_type: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.get(parent.action_type.href);
     },
+    person: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.get(parent.person.href);
+    },
   },
   ProjectMember: {
     person: (parent, args, { dataSources }) => {
