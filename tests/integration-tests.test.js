@@ -1,8 +1,21 @@
-import { ApolloServer, gql } from 'apollo-server-lambda';
+import { ApolloServer } from 'apollo-server-lambda';
+import depthLimit from 'graphql-depth-limit';
 import { createTestClient } from 'apollo-server-testing';
 import { typeDefs } from '../schema';
 import { resolvers } from '../resolvers';
 import { EResearchProjectAPI } from '../datasources/eresearch-project-api';
+import {
+  GET_USER,
+  GET_PERSON,
+  GET_PROJECT,
+  GET_DROPBOX,
+  GET_VIS,
+  GET_VM,
+  GET_STORAGE,
+  GET_NECTAR,
+  GET_ALL_INFO_OF_A_PERSON,
+  GET_ALL_INFO_OF_A_PROJECT,
+  QUERY_DEPTH_OVER_5 } from './queries';
 
 
 // create a test server using the real typeDefs, resolvers and datasources
@@ -17,66 +30,13 @@ const server = new ApolloServer({
     };
   },
   context: () => ({ }), // pass any context required, e.g. username
+  validationRules: [
+    depthLimit(5),
+  ],
 });
 
 // testClient can also return mutation for mutation tests
 const { query } = createTestClient(server);
-
-const GET_USER = gql`
-  query Person($username: String!) {
-    user(username: $username) {
-      id
-    }
-  }`;
-
-const GET_PERSON = gql`
-  query Person($id: Int!) {
-    person(id: $id) {
-      full_name
-    }
-  }`;
-
-const GET_PROJECT = gql`
-  query Project($id: Int!) {
-    project(id: $id) {
-      title
-    }
-  }`;
-
-const GET_DROPBOX = gql`
-query DropBoxService($id: Int!) {
-  dropbox(id: $id) {
-    name
-  }
-}`;
-
-const GET_VIS = gql`
-query VisualisationService($id: Int!) {
-  visualisation(id: $id) {
-    name
-  }
-}`;
-
-const GET_VM = gql`
-query ResearchVMService($id: Int!) {
-  researchvm(id: $id) {
-    name
-  }
-}`;
-
-const GET_STORAGE = gql`
-query ResearchStorageService($id: Int!) {
-  researchstorage(id: $id) {
-    name
-  }
-}`;
-
-const GET_NECTAR = gql`
-query NectarService($id: Int!) {
-  nectar(id: $id) {
-    name
-  }
-}`;
 
 // Test suite for integration tests where we are testing a query against
 // the actual schema, resolvers and ensuring the datasource returns the
@@ -161,6 +121,39 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
       }
     );
     expect(res.data.nectar.name).toBe('active_learning');
+  });
+
+  test('Get all the info of person 1', async() => {
+    const res = await query(
+      {
+        query: GET_ALL_INFO_OF_A_PERSON,
+        variables: { id: 1 },
+      }
+    );
+    expect(
+      res.data.person.divisions[0].divisional_role.name
+    ).toBe('Staff or Post Doc');
+  });
+
+  test('Get all the info of project 1', async() => {
+    const res = await query(
+      {
+        query: GET_ALL_INFO_OF_A_PROJECT,
+        variables: { id: 1 },
+      }
+    );
+    expect(res.data.project.id).toBe(1);
+  });
+
+  test('Error on query depth greater than 5', async() => {
+    const res = await query(
+      {
+        query: QUERY_DEPTH_OVER_5,
+        variables: { id: 1 },
+      }
+    );
+    expect(res.errors[0].message).toContain(
+      'exceeds maximum operation depth of 5');
   });
 
 });
