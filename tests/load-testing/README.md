@@ -150,6 +150,15 @@ Here you should set all the arguments that might be used on the load testing, an
 }
 ```
 
+## Viewing the load testings outputs
+
+Outputs from the load testing are saved in tests/load-testing/outputs. The outputs are the raw results in JSON format, and the set of queries that were generated and tested.
+
+You can run an extra command to get a full report generated in html:
+```
+npx artillery report ./tests/load-testing/outputs/<report-date>.json
+```
+
 # License
 ### The MIT License
 

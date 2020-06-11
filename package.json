@@ -35,6 +35,13 @@
   "jest": {
     "setupFilesAfterEnv": [
       "./jest-preload-env.js"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/lcov-report/**",
+      "!**/load-testing/**",
+      "!**/queries.js"
     ]
   },
   "repository": {

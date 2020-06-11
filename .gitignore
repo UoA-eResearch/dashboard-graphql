@@ -11,3 +11,4 @@ jspm_packages
 # Testing files
 coverage
 tests/load-testing/outputs/*.json
+tests/load-testing/outputs/*.html
