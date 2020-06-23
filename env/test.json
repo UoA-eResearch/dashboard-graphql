@@ -4,5 +4,7 @@
     "PROJECT_DB_API_KEY": "${ssm:/dev/cer-dashboard/projectdb_apikey_test~true}",
     "OAUTH_SCOPES": [
         "TBD"
-    ]
+    ],
+    "COGNITO_DOMAIN": "TBD",
+    "COGNITO_REGION": "TBD"
 }

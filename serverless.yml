@@ -43,6 +43,8 @@ provider:
     ENV: ${self:provider.stage}
     PROJECT_DB_BASE_URL: ${file(env/${self:provider.stage}.json):PROJECT_DB_BASE_URL}
     PROJECT_DB_API_KEY: ${file(env/${self:provider.stage}.json):PROJECT_DB_API_KEY}
+    COGNITO_DOMAIN: ${file(env/${self:provider.stage}.json):COGNITO_DOMAIN}
+    COGNITO_REGION: ${file(env/${self:provider.stage}.json):COGNITO_REGION}
   iamRoleStatements:
     - Effect: Allow
       Action:

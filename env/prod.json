@@ -4,5 +4,7 @@
     "PROJECT_DB_API_KEY": "TBD",
     "OAUTH_SCOPES": [
         "TBD"
-    ]
+    ],
+    "COGNITO_DOMAIN": "TBD",
+    "COGNITO_REGION": "TBD"
 }

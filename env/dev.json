@@ -5,5 +5,7 @@
         "openid",
         "profile",
         "https://my-domain.auckland.ac.nz/angular-test"
-    ]
+    ],
+    "COGNITO_DOMAIN": "uoapool-sandbox",
+    "COGNITO_REGION": "ap-southeast-2"
 }

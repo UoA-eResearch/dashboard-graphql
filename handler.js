@@ -3,6 +3,7 @@ import depthLimit from 'graphql-depth-limit';
 import { typeDefs } from './schema';
 import { resolvers } from './resolvers';
 import { EResearchProjectAPI } from './datasources/eresearch-project-api';
+import { getUserInfo } from './helpers/auth';
 
 const server = new ApolloServer({
   typeDefs,
@@ -17,6 +18,8 @@ const server = new ApolloServer({
     functionName: context.functionName,
     event,
     context,
+    // optional: get user info from cognito - e.g. group membership
+    user: getUserInfo(event),
   }),
   validationRules: [
     depthLimit(

@@ -4,6 +4,7 @@
   "description": "dashboard graphql server",
   "main": "handler.js",
   "dependencies": {
+    "@uoa/utilities": "0.0.6",
     "apollo-datasource-rest": "^0.9.2",
     "apollo-server-lambda": "^2.13.1",
     "graphql": "^15.0.0",
