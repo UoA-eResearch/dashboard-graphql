@@ -42,6 +42,11 @@ const { query } = createTestClient(server);
 // the actual schema, resolvers and ensuring the datasource returns the
 // result we expect, and that it has the correct format and types.
 describe('Basic query -> resolver -> REST API -> schema tests', () => {
+  // Maybe required if experiencing test timeout errors
+  // beforeAll(() => {
+  //   jest.setTimeout(10000); // default timeout = 5000
+  // });
+
   test('Check the person Id of username gsou008', async() => {
     const res = await query(
       {
