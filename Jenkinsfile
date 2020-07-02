@@ -60,10 +60,10 @@ pipeline {
                     echo "awsProfile set to ${awsProfile}"
 
                     withCredentials([
-                        usernamePassword(credentialsId: "${env.AWS_CREDENTIALS_ID}", passwordVariable: 'awsPassword', usernameVariable: 'awsUsername'),
-                        string(credentialsId: "${env.AWS_TOKEN_ID}", variable: 'awsToken')
+                        usernamePassword(credentialsId: "${awsCredentialsId}", passwordVariable: 'awsPassword', usernameVariable: 'awsUsername'),
+                        string(credentialsId: "${awsTokenId}", variable: 'awsToken')
                     ]) {
-                        sh "python3 /home/jenkins/aws_saml_login.py --idp iam.auckland.ac.nz --user $awsUsername --password $awsPassword --token $awsToken --profile ${env.AWS_PROFILE}"
+                        sh "python3 /home/jenkins/aws_saml_login.py --idp iam.auckland.ac.nz --user $awsUsername --password $awsPassword --token $awsToken --profile ${awsProfile}"
                     }
                 }
             }
@@ -80,7 +80,7 @@ pipeline {
                     )
                     echo "Deployment stage = ${stage}"
                     
-                    sh "npm run deploy -- --stage=${stage} --profile ${env.AWS_PROFILE}"
+                    sh "npm run deploy -- --stage=${stage} --profile ${awsProfile}"
 
                     echo "Deploy to ${env.BRANCH_NAME} complete"
                 }
