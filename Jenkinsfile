@@ -80,7 +80,7 @@ pipeline {
                     )
                     echo "Deployment stage = ${stage}"
                     
-                    sh "npm run deploy -- --stage=${stage} --profile ${awsProfile}"
+                    sh "sls deploy --stage ${stage} --aws-profile ${awsProfile}"
 
                     echo "Deploy to ${env.BRANCH_NAME} complete"
                 }
