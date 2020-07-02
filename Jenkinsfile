@@ -1,3 +1,5 @@
+awsProfile = ''
+
 pipeline {
     agent {
         label("uoa-buildtools-ionic")
@@ -10,37 +12,85 @@ pipeline {
             }
         }
         
-        stage('Run tests') {
-            when {
-                changeset "**/dashboard-graphql/*.*"
-            }
-            steps {
-                echo 'Testing dashboard-graphql project'
-            }
-        }  
-        
         stage('Build') {
-            when {
-                changeset "**/dashboard-graphql/*.*"
-            }
             steps {
-                echo 'Building dashboard-graphql project'
+                echo "Building dashboard-graphql project. Build number: ${env.BUILD_NUMBER}"
+                sh "npm install"
+                echo "further build steps are handled in the deployment stage"
+            }
+        }
+        
+        stage('Run tests') {
+            steps {
+                echo "Testing dashboard-graphql project"
+                sh "npm run test:prod"
+            }
+        }
+
+        stage('AWS Credential Grab') {
+            steps{
+                script {
+                    echo "☯ Authenticating with AWS"
+
+                    def awsCredentialsId = ''
+                    def awsTokenId = ''
+
+                    if (env.BRANCH_NAME == 'sandbox') {
+                        echo 'Setting variables for sandbox deployment'
+                        awsCredentialsId = 'aws-sandbox-user'
+                        awsTokenId = 'aws-sandbox-token'
+                        awsProfile = 'uoa-sandbox'
+
+                    } else if (env.BRANCH_NAME == 'nonprod') {
+                        echo 'Setting variables for nonprod deployment'
+                        awsCredentialsId = 'aws-its-nonprod-access'
+                        awsTokenId = 'aws-its-nonprod-token'
+                        awsProfile = 'uoa-its-nonprod'
+
+                    } else if (env.BRANCH_NAME == 'prod') {
+                        echo 'Setting variables for prod deployment'
+                        awsCredentialsId = 'uoa-its-prod-access'
+                        awsTokenId = 'uoa-its-prod-token'
+                        awsProfile = 'uoa-its-prod'
+
+                    } else {
+                        echo 'No Env set'
+                    }
+
+                    echo "awsProfile set to ${awsProfile}"
+
+                    withCredentials([
+                        usernamePassword(credentialsId: "${env.AWS_CREDENTIALS_ID}", passwordVariable: 'awsPassword', usernameVariable: 'awsUsername'),
+                        string(credentialsId: "${env.AWS_TOKEN_ID}", variable: 'awsToken')
+                    ]) {
+                        sh "python3 /home/jenkins/aws_saml_login.py --idp iam.auckland.ac.nz --user $awsUsername --password $awsPassword --token $awsToken --profile ${env.AWS_PROFILE}"
+                    }
+                }
             }
         }
   
         stage('Deploy') {
-            when {
-                changeset "**/dashboard-graphql/*.*"
-            }
             steps {
-                echo 'Deploying dashboard-graphql to Lambda on ' + BRANCH_NAME
+                echo "Deploying dashboard-graphql to Lambda on ${env.BRANCH_NAME}"
+                script {            
+                    def stage = (
+                        env.BRANCH_NAME == 'prod' ? prod : 
+                        env.BRANCH_NAME == 'nonprod' ? test : 
+                        dev
+                    )
+                    echo "Deployment stage = ${stage}"
+                    
+                    sh "npm run deploy -- --stage=${stage} --profile ${env.AWS_PROFILE}"
+
+                    echo "Deploy to ${env.BRANCH_NAME} complete"
+                }
             }
         }
     }
     
     post {
         success {
-            echo 'Jenkins job ran successfully. Deployed to ' + BRANCH_NAME
+            echo "Jenkins job ran successfully. Deployed to ${env.BRANCH_NAME}"
         }
         failure {
             echo 'Jenkins job failed :('
