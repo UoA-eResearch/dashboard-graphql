@@ -74,9 +74,9 @@ pipeline {
                 echo "Deploying dashboard-graphql to Lambda on ${env.BRANCH_NAME}"
                 script {            
                     def stage = (
-                        env.BRANCH_NAME == 'prod' ? prod : 
-                        env.BRANCH_NAME == 'nonprod' ? test : 
-                        dev
+                        env.BRANCH_NAME == 'prod' ? 'prod' : 
+                        env.BRANCH_NAME == 'nonprod' ? 'test' : 
+                        'dev'
                     )
                     echo "Deployment stage = ${stage}"
                     
