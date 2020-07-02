@@ -19,7 +19,7 @@ const server = new ApolloServer({
     event,
     context,
     // optional: get user info from cognito - e.g. group membership
-    user: getUserInfo(event),
+    user: process.env.ENV === 'dev' ? '' : getUserInfo(event),
   }),
   validationRules: [
     depthLimit(
