@@ -28,9 +28,10 @@
     "build": "sls webpack",
     "debug-linux": "export SLS_DEBUG=* && node --inspect ./node_modules/.bin/sls offline",
     "debug": "SET SLS_DEBUG=* && node --inspect %AppData%/npm/node_modules/serverless/bin/serverless offline",
-    "deploy": "npm test && sls deploy",
+    "deploy": "sls deploy",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "SET NODE_ENV=test && sls dotenv && serverless-bundle test --coverage",
+    "test:prod": "SET NODE_ENV=test && sls dotenv && serverless-bundle test --testPathIgnorePatterns=integration-tests.test.js",
     "load-test": "npx ./tests/load-testing/bin/easygraphql-lt.js ./tests/load-testing/config.json"
   },
   "jest": {
