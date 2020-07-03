@@ -9,7 +9,7 @@ pipeline {
         stage("Checkout") {
             steps {
                 checkout scm
-                githubNotify description: "Build starting..." status: "PENDING"
+                githubNotify description: "Build starting...", status: "PENDING"
             }
         }
         
