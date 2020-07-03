@@ -9,6 +9,7 @@ pipeline {
         stage("Checkout") {
             steps {
                 checkout scm
+                githubNotify description: "Build starting..." status: "PENDING"
             }
         }
         
@@ -91,9 +92,11 @@ pipeline {
     post {
         success {
             echo "Jenkins job ran successfully. Deployed to ${env.BRANCH_NAME}"
+            githubNotify description: "Build number ${env.BUILD_NUMBER} succeeded.",  status: "SUCCESS"
         }
         failure {
             echo 'Jenkins job failed :('
+            githubNotify description: "Build number ${env.BUILD_NUMBER} failed.",  status: "FAILURE"
         }
     }
 }
