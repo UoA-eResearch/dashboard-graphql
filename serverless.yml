@@ -12,6 +12,11 @@ custom:
   serverless-offline:
     stage: ${self:provider.stage}
     httpPort: 4000
+  # customDomain:
+  #   domainName: ${file(env/${self:provider.stage}.json):infra.awsApiGatewayCustomDomainName}
+  #   basePath: ${self:service}
+  #   stage: ${self:provider.stage}
+  #   createRoute53Record: true
 
 provider:
   name: aws
@@ -19,7 +24,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ap-southeast-2
   endpointType: regional
-  role: arn:aws:iam::416527880812:role/lambda_basic_execution_with_read_only_access_to_SSM
+  role: myDefaultRole
   tags:
     Department: ${self:custom.Department}
     Environment: ${self:custom.Environment}
@@ -41,35 +46,18 @@ provider:
   environment:
     # Environment variables available to all functions in this service
     ENV: ${self:provider.stage}
-    PROJECT_DB_BASE_URL: ${file(env/${self:provider.stage}.json):PROJECT_DB_BASE_URL}
-    PROJECT_DB_API_KEY: ${file(env/${self:provider.stage}.json):PROJECT_DB_API_KEY}
-    COGNITO_DOMAIN: ${file(env/${self:provider.stage}.json):COGNITO_DOMAIN}
-    COGNITO_REGION: ${file(env/${self:provider.stage}.json):COGNITO_REGION}
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - ssm:GetParameter
-        - ssm:GetParameters
-      Resource:
-        - "arn:aws:ssm:${self:provider.region}:416527880812:parameter/${self:provider.stage}/cer-dashboard/*"
-    - Effect: Allow
-      Action:
-        - kms:Decrypt
-      Resource:
-        - "arn:aws:kms:ap-southeast-2:416527880812:key/3cf7aeb4-ad8c-4505-a8e3-7d2a556e188d"
-  apiGateway: # API Gateway global config
-    authorizers:
-      cognito-authorizer-uoapool:
-        type: 'cognito'
-        userPoolArn: 'arn:aws:cognito-idp:ap-southeast-2:416527880812:userpool/ap-southeast-2_pgErjyL4O' # required
-        userPoolClientId: 'lrju6v80vse4bbaesjvnr2ff0' # required
-        userPoolDomain: 'uoapool-sandbox' # required
-        scope: 'openid profile https://my-domain.auckland.ac.nz/angular-test'  
+    NODE_ENV: ${file(env/${self:provider.stage}.json):app.NODE_ENV}
+    PROJECT_DB_BASE_URL: ${file(env/${self:provider.stage}.json):app.PROJECT_DB_BASE_URL}
+    PROJECT_DB_API_KEY: ${file(env/${self:provider.stage}.json):app.PROJECT_DB_API_KEY}
+    COGNITO_DOMAIN: ${file(env/${self:provider.stage}.json):app.COGNITO_DOMAIN}
+    REGION: ${self:provider.region}
+    CORS_ACCESS_CONTROL_ALLOW_ORIGINS: "${file(env/${self:provider.stage}.json):app.CORS_ACCESS_CONTROL_ALLOW_ORIGINS}"
 
 plugins:
   - serverless-bundle # Must be first, see https://github.com/AnomalyInnovations/serverless-bundle
   - serverless-offline # See https://github.com/dherault/serverless-offline
   - '@unly/serverless-env-copy-plugin' # See https://github.com/UnlyEd/serverless-env-copy-plugin
+  # - serverless-domain-manager
  
 functions:
   graphql:
@@ -78,13 +66,133 @@ functions:
     - http:
         path: graphql
         method: post
-        cors: true
+        cors:
+          origin: "${file(env/${self:provider.stage}.json):app.CORS_ACCESS_CONTROL_ALLOW_ORIGINS}"
+          headers:
+            - Content-Type
+            - Authorization
+          allowCredentials: false
         authorizer:
           type: cognito_user_pools
-          arn: arn:aws:cognito-idp:ap-southeast-2:416527880812:userpool/ap-southeast-2_pgErjyL4O
-          identitySource: method.request.header.Authorization
-          scopes: ${file(env/${self:provider.stage}.json):OAUTH_SCOPES}
+          authorizerId:
+            Ref: MyApiGatewayAuthorizer
+          scopes: ${file(env/${self:provider.stage}.json):app.awsApiGatewayOauthScopes}
     - http:
         path: graphql
         method: get
+        cors:
+          origin: "${file(env/${self:provider.stage}.json):app.CORS_ACCESS_CONTROL_ALLOW_ORIGINS}"
+          headers:
+            - Content-Type
+            - Authorization
+          allowCredentials: false
 
+resources:
+  Resources:
+    myDefaultRole:
+      Type: "AWS::IAM::Role"
+      Properties:
+        Path: /
+        RoleName: ${self:service}-lambda-role
+        AssumeRolePolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action: "sts:AssumeRole"
+        ManagedPolicyArns:
+          - "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+        Policies:
+          - PolicyName: myPolicyName
+            PolicyDocument:
+              Version: "2012-10-17"
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - "logs:CreateLogGroup"
+                    - "logs:CreateLogStream"
+                    - "logs:PutLogEvents"
+                  Resource:
+                    - "Fn::Join":
+                        - ":"
+                        - - "arn:aws:logs"
+                          - Ref: "AWS::Region"
+                          - Ref: "AWS::AccountId"
+                          - "log-group:/aws/lambda/*:*:*"
+                - Effect: Allow
+                  Action:
+                    - ssm:GetParameter
+                    - ssm:GetParameters
+                  Resource:
+                    - "arn:aws:ssm:${self:provider.region}:416527880812:parameter/${self:provider.stage}/cer-dashboard/*"
+                - Effect: Allow
+                  Action:
+                    - kms:Decrypt
+                  Resource:
+                    - "arn:aws:kms:ap-southeast-2:416527880812:key/3cf7aeb4-ad8c-4505-a8e3-7d2a556e188d"
+    MyApiGatewayAuthorizer:
+      Type: AWS::ApiGateway::Authorizer
+      Properties:
+        AuthorizerResultTtlInSeconds: 10
+        IdentitySource: method.request.header.Authorization
+        Name: cognito-authorizer-uoapool
+        RestApiId:
+          Ref: ApiGatewayRestApi
+        Type: COGNITO_USER_POOLS
+        ProviderARNs:
+          - "Fn::Join":
+              - ":"
+              - - "arn:aws:cognito-idp"
+                - Ref: "AWS::Region"
+                - Ref: "AWS::AccountId"
+                - "userpool/${file(env/${self:provider.stage}.json):infra.cognitoUserPoolId}"
+    MyResourceServer:
+      Type: AWS::Cognito::UserPoolResourceServer
+      Properties:
+        Identifier: https://${file(env/${self:provider.stage}.json):infra.cognitoResourceServerName}.auckland.ac.nz
+        Name: ${file(env/${self:provider.stage}.json):infra.cognitoResourceServerName}
+        Scopes:
+          - ScopeName: ${file(env/${self:provider.stage}.json):infra.cognitoAppClientName}
+            ScopeDescription: Can access to ${file(env/${self:provider.stage}.json):infra.cognitoAppClientName}
+        UserPoolId: ${file(env/${self:provider.stage}.json):infra.cognitoUserPoolId}
+    MyCognitoAppClient:
+      DependsOn: MyResourceServer
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        UserPoolId: ${file(env/${self:provider.stage}.json):infra.cognitoUserPoolId}
+        SupportedIdentityProviders: ${file(env/${self:provider.stage}.json):infra.cognitoIdentityProvider}
+        AllowedOAuthFlowsUserPoolClient: true
+        AllowedOAuthFlows:
+          - code
+        AllowedOAuthScopes: ${file(env/${self:provider.stage}.json):infra.cognitoAppClientScopes}
+        CallbackURLs: ${file(env/${self:provider.stage}.json):infra.cognitoAppClientCallbackUrls}
+        ClientName: ${file(env/${self:provider.stage}.json):infra.cognitoAppClientName}
+        LogoutURLs: ${file(env/${self:provider.stage}.json):infra.cognitoAppClientLogoutUrls}
+        ExplicitAuthFlows:
+          - ALLOW_CUSTOM_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+        GenerateSecret: false
+        RefreshTokenValidity: 1
+        ReadAttributes:
+          - given_name
+          - family_name
+          - custom:EmpID
+          - custom:Groups
+          - name
+          - email
+          - preferred_username
+    MyCognitoGroupMembershipParameter:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Description: Groupmembership list for ${self:service} Cognito Client App
+        Name:
+          "Fn::Join":
+            - "/"
+            - - /${self:provider.stage}
+              - cognito
+              - Ref: MyCognitoAppClient
+        Tier: Standard
+        Type: String
+        Value: ${file(env/${self:provider.stage}.json):app.authorisedGroupmembershipList}
