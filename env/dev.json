@@ -1,11 +1,35 @@
 {
-    "PROJECT_DB_BASE_URL": "https://api.test.auckland.ac.nz/service/eresearch-project/v1",
-    "PROJECT_DB_API_KEY": "${ssm:/dev/cer-dashboard/projectdb_apikey_test~true}",
-    "OAUTH_SCOPES": [
-        "openid",
-        "profile",
-        "https://my-domain.auckland.ac.nz/angular-test"
-    ],
-    "COGNITO_DOMAIN": "uoapool-sandbox",
-    "COGNITO_REGION": "ap-southeast-2"
+    "infra": {
+        "awsApiGatewayCustomDomainName": "apigw.sandbox.amazon.auckland.ac.nz",
+        "cognitoUserPoolId": "ap-southeast-2_pgErjyL4O",
+        "cognitoIdentityProvider": [
+            "UoATestIDP"
+        ],
+        "cognitoAppClientName": "angular-test",
+        "cognitoAppClientScopes": [
+            "openid",
+            "profile",
+            "https://my-domain.auckland.ac.nz/angular-test"
+        ],
+        "cognitoAppClientCallbackUrls": [
+            "http://localhost:4200",
+            "https://domx0qy8opg01.cloudfront.net"
+        ],
+        "cognitoAppClientLogoutUrls": [
+            "http://localhost:4200",
+            "https://domx0qy8opg01.cloudfront.net"
+        ],
+        "cognitoResourceServerName": "my-domain"
+    },
+    "app": {
+        "NODE_ENV": "test",
+        "COGNITO_DOMAIN": "uoapool-sandbox",
+        "PROJECT_DB_BASE_URL": "https://api.test.auckland.ac.nz/service/eresearch-project/v1",
+        "PROJECT_DB_API_KEY": "${ssm:/dev/cer-dashboard/projectdb_apikey_test~true}",
+        "authorisedGroupmembershipList": "Employee.psrwi",
+        "awsApiGatewayOauthScopes": [
+            "https://my-domain.auckland.ac.nz/angular-test"
+        ],
+        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*"
+    }
 }

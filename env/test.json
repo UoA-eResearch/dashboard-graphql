@@ -1,10 +1,32 @@
 {
-    "NODE_ENV": "test",
-    "PROJECT_DB_BASE_URL": "https://api.test.auckland.ac.nz/service/eresearch-project/v1",
-    "PROJECT_DB_API_KEY": "${ssm:/dev/cer-dashboard/projectdb_apikey_test~true}",
-    "OAUTH_SCOPES": [
-        "TBD"
-    ],
-    "COGNITO_DOMAIN": "TBD",
-    "COGNITO_REGION": "TBD"
+    "infra": {
+        "awsApiGatewayCustomDomainName": "apigw.test.amazon.auckland.ac.nz",
+        "cognitoUserPoolId": "ap-southeast-2_KgOa2ZUxp",
+        "cognitoIdentityProvider": [
+            "UoATestIDP"
+        ],
+        "cognitoAppClientName": "TBD",
+        "cognitoAppClientScopes": [
+            "openid",
+            "profile",
+            "TBD"
+        ],
+        "cognitoAppClientCallbackUrls": [
+            "TBD"
+        ],
+        "cognitoAppClientLogoutUrls": [
+            "TBD"
+        ]
+    },
+    "app": {
+        "NODE_ENV": "test",
+        "COGNITO_DOMAIN": "TBD",
+        "PROJECT_DB_BASE_URL": "https://api.test.auckland.ac.nz/service/eresearch-project/v1",
+        "PROJECT_DB_API_KEY": "TBD",
+        "authorisedGroupmembershipList": "TBD",
+        "awsApiGatewayOauthScopes": [
+            "TBD"
+        ],
+        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "TBD"
+    }
 }

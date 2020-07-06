@@ -8,7 +8,7 @@ export async function getUserInfo(event) {
     let data = await utils.getUserInfo(
       event,
       process.env.COGNITO_DOMAIN + '.auth.' +
-      process.env.COGNITO_REGION + '.amazoncognito.com'
+      process.env.REGION + '.amazoncognito.com'
     );
     if (data.error) {
       throw new AuthenticationError(data.error);
