@@ -14,21 +14,6 @@ pipeline {
                 slackSend(channel: slackChannel, tokenCredentialId: slackCredentials, message: "Build Started - ${env.JOB_NAME} ${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
             }
         }
-        
-        stage('Build') {
-            steps {
-                echo "Building dashboard-graphql project. Build number: ${env.BUILD_NUMBER}"
-                sh "npm install"
-                echo "further build steps are handled in the deployment stage"
-            }
-        }
-        
-        stage('Run tests') {
-            steps {
-                echo "Testing dashboard-graphql project"
-                sh "npm run test:prod"
-            }
-        }
 
         stage('AWS Credential Grab') {
             steps{
@@ -69,6 +54,21 @@ pipeline {
                         sh "python3 /home/jenkins/aws_saml_login.py --idp iam.auckland.ac.nz --user $awsUsername --password $awsPassword --token $awsToken --profile ${awsProfile}"
                     }
                 }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                echo "Building dashboard-graphql project. Build number: ${env.BUILD_NUMBER}"
+                sh "npm install"
+                echo "further build steps are handled in the deployment stage"
+            }
+        }
+        
+        stage('Run tests') {
+            steps {
+                echo "Testing dashboard-graphql project"
+                sh "npm run test:prod"
             }
         }
   
