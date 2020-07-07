@@ -13,9 +13,7 @@ export async function getUserInfo(event) {
     if (data.error) {
       throw new AuthenticationError(data.error);
     } else {
-      console.log('*************************');
       console.log(`user's groups = ${data['custom:Groups']}`);
-      console.log('*************************');
       return data;
     }
   } catch (e) {

@@ -37,7 +37,7 @@ const server = new ApolloServer({
     return response;
   },
   playground: {
-    endpoint: 'http://localhost:4000/dev/graphql',
+    endpoint: process.env.PLAYGROUND_ENDPOINT,
     settings: {
       'schema.polling.interval': 60000,
     },

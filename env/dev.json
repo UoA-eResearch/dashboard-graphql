@@ -30,6 +30,7 @@
         "awsApiGatewayOauthScopes": [
             "https://my-domain.auckland.ac.nz/angular-test"
         ],
-        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*"
+        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*",
+        "PLAYGROUND_ENDPOINT": "http://localhost:4000/dev/graphql"
     }
 }

@@ -52,6 +52,7 @@ provider:
     COGNITO_DOMAIN: ${file(env/${self:provider.stage}.json):app.COGNITO_DOMAIN}
     REGION: ${self:provider.region}
     CORS_ACCESS_CONTROL_ALLOW_ORIGINS: "${file(env/${self:provider.stage}.json):app.CORS_ACCESS_CONTROL_ALLOW_ORIGINS}"
+    PLAYGROUND_ENDPOINT: ${file(env/${self:provider.stage}.json):app.PLAYGROUND_ENDPOINT}
 
 plugins:
   - serverless-bundle # Must be first, see https://github.com/AnomalyInnovations/serverless-bundle
@@ -149,6 +150,7 @@ resources:
                 - Ref: "AWS::AccountId"
                 - "userpool/${file(env/${self:provider.stage}.json):infra.cognitoUserPoolId}"
     MyResourceServer:
+      # TODO: modify this once a new app client is created (using test one atm) and change out the cognitoResourceServerName for cognitoAppClientName
       Type: AWS::Cognito::UserPoolResourceServer
       Properties:
         Identifier: https://${file(env/${self:provider.stage}.json):infra.cognitoResourceServerName}.auckland.ac.nz

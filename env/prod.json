@@ -27,6 +27,7 @@
         "awsApiGatewayOauthScopes": [
             "TBD"
         ],
-        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "TBD"
+        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "TBD",
+        "PLAYGROUND_ENDPOINT": ""
     }
 }
