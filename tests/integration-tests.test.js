@@ -1,8 +1,4 @@
-import { ApolloServer } from 'apollo-server-lambda';
-import depthLimit from 'graphql-depth-limit';
-import { createTestClient } from 'apollo-server-testing';
-import { typeDefs } from '../schema';
-import { resolvers } from '../resolvers';
+import { constructTestServer } from './utils/test_server';
 import { EResearchProjectAPI } from '../datasources/eresearch-project-api';
 import {
   GET_USER,
@@ -15,37 +11,31 @@ import {
   GET_NECTAR,
   GET_ALL_INFO_OF_A_PERSON,
   GET_ALL_INFO_OF_A_PROJECT,
-  QUERY_DEPTH_OVER_5 } from './queries';
+  QUERY_DEPTH_OVER_5 } from './utils/test_queries';
 
 
 // create a test server using the real typeDefs, resolvers and datasources
 // any of these can alternatively be mocked.
 // See https://www.apollographql.com/docs/apollo-server/testing/mocking/
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  dataSources: () => {
-    return {
-      eresAPI: new EResearchProjectAPI(),
-    };
-  },
-  context: () => ({ }), // pass any context required, e.g. username
-  validationRules: [
-    depthLimit(5),
-  ],
-});
+// See also mock-integrations.test.js
+const eresAPI = new EResearchProjectAPI();
+const { query } = constructTestServer(() => ({eresAPI}));
 
-// testClient can also return mutation for mutation tests
-const { query } = createTestClient(server);
-
-// Test suite for integration tests where we are testing a query against
-// the actual schema, resolvers and ensuring the datasource returns the
-// result we expect, and that it has the correct format and types.
 describe('Basic query -> resolver -> REST API -> schema tests', () => {
-  // Maybe required if experiencing test timeout errors
-  // beforeAll(() => {
-  //   jest.setTimeout(10000); // default timeout = 5000
-  // });
+  /* Test suite for full integration tests where we are testing a query against
+     the actual schema, resolvers and datasources. Mainly used to check if the
+     result we expect is returned from the external service.
+
+     These tests could break if:
+     - someone accidentally deletes anything from our resolver,
+       data source method or associated type definitions
+     - someone adds a required field to the associated type definitions
+     - someone accidentally renames the endpoint
+     - GraphQL throws an error
+     - The external service (e.g. the eResearch Project API)
+       has changed or is unavailable
+     - (Anything else?)
+  */
 
   test('Check the person Id of username gsou008', async() => {
     const res = await query(

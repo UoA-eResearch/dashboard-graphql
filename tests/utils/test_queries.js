@@ -4,6 +4,7 @@ export const GET_USER = gql`
 query Person($username: String!) {
   user(username: $username) {
     id
+    full_name
   }
 }`;
 
@@ -23,82 +24,37 @@ query Project($id: Int!) {
 
 export const GET_DROPBOX = gql`
 query DropBoxService($id: Int!) {
-dropbox(id: $id) {
-  name
-  projects {
-    id
-    code
-    first_day
-    last_day
-    project {
-      id
-    }
+  dropbox(id: $id) {
+    name
   }
-}
 }`;
 
 export const GET_VIS = gql`
 query VisualisationService($id: Int!) {
-visualisation(id: $id) {
-  name
-  projects {
-    id
-    code
-    first_day
-    last_day
-    project {
-      id
-    }
+  visualisation(id: $id) {
+    name
   }
-}
 }`;
 
 export const GET_VM = gql`
 query ResearchVMService($id: Int!) {
-researchvm(id: $id) {
-  name
-  projects {
-    id
-    code
-    first_day
-    last_day
-    project {
-      id
-    }
+  researchvm(id: $id) {
+    name
   }
-}
 }`;
 
 export const GET_STORAGE = gql`
 query ResearchStorageService($id: Int!) {
-researchstorage(id: $id) {
-  name
-  projects {
-    id
-    code
-    first_day
-    last_day
-    project {
-      id
-    }
+  researchstorage(id: $id) {
+    name
   }
-}
 }`;
 
 export const GET_NECTAR = gql`
 query NectarService($id: Int!) {
-nectar(id: $id) {
-  name
-  projects {
-    id
-    code
-    first_day
-    last_day
-    project {
-      id
-    }
+  nectar(id: $id) {
+    name
   }
-}
 }`;
 
 export const GET_ALL_INFO_OF_A_PERSON = gql`
