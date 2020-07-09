@@ -68,7 +68,7 @@ pipeline {
         stage('Run tests') {
             steps {
                 echo "Testing dashboard-graphql project"
-                sh "npm run test:ci"
+                sh "env AWS_PROFILE=${awsProfile} npm run test:ci"
             }
         }
   
