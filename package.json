@@ -31,7 +31,7 @@
     "deploy": "sls deploy",
     "pretest": "eslint --ignore-path .gitignore .",
     "test": "SET NODE_ENV=test && sls dotenv && serverless-bundle test --coverage",
-    "test:prod": "export NODE_ENV=test && sls dotenv && serverless-bundle test --testPathIgnorePatterns=integration-tests.test.js",
+    "test:ci": "export NODE_ENV=test && sls dotenv && serverless-bundle test",
     "load-test": "npx ./tests/load-testing/bin/easygraphql-lt.js ./tests/load-testing/config.json"
   },
   "jest": {

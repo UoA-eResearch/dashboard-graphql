@@ -4,11 +4,11 @@ import {
   GET_USER,
   GET_PERSON,
   GET_PROJECT,
-  GET_DROPBOX,
-  GET_VIS,
-  GET_VM,
-  GET_STORAGE,
-  GET_NECTAR,
+  GET_DROPBOX_PROJECTS,
+  GET_VIS_PROJECTS,
+  GET_VM_PROJECTS,
+  GET_STORAGE_PROJECTS,
+  GET_NECTAR_PROJECTS,
   GET_ALL_INFO_OF_A_PERSON,
   GET_ALL_INFO_OF_A_PROJECT,
   QUERY_DEPTH_OVER_5 } from './utils/test_queries';
@@ -68,54 +68,59 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
       'Movement Disorders and Rehabilitation');
   });
 
-  test('Check the name of dropbox service 1', async() => {
+  test('Check the name and projects of dropbox service 1', async() => {
     const res = await query(
       {
-        query: GET_DROPBOX,
+        query: GET_DROPBOX_PROJECTS,
         variables: { id: 1 },
       }
     );
     expect(res.data.dropbox.name).toBe('Rob_Testing');
+    expect(Array.isArray(res.data.dropbox.projects)).toBe(true);
   });
 
-  test('Check the name of visualisation service 1', async() => {
+  test('Check the name and projects of visualisation service 1', async() => {
     const res = await query(
       {
-        query: GET_VIS,
+        query: GET_VIS_PROJECTS,
         variables: { id: 1 },
       }
     );
     expect(res.data.visualisation.name).toBe('legacy');
+    expect(Array.isArray(res.data.visualisation.projects)).toBe(true);
   });
 
-  test('Check the name of researchvm service 1', async() => {
+  test('Check the name and projects of researchvm service 1', async() => {
     const res = await query(
       {
-        query: GET_VM,
+        query: GET_VM_PROJECTS,
         variables: { id: 1 },
       }
     );
     expect(res.data.researchvm.name).toBe('ceratriprd01');
+    expect(Array.isArray(res.data.researchvm.projects)).toBe(true);
   });
 
-  test('Check the name of researchstorage service 1', async() => {
+  test('Check the name and projects of researchstorage service 1', async() => {
     const res = await query(
       {
-        query: GET_STORAGE,
+        query: GET_STORAGE_PROJECTS,
         variables: { id: 1 },
       }
     );
     expect(res.data.researchstorage.name).toBe('reseng201800030-ssc');
+    expect(Array.isArray(res.data.researchstorage.projects)).toBe(true);
   });
 
-  test('Check the name of nectar service 1', async() => {
+  test('Check the name and projects of nectar service 1', async() => {
     const res = await query(
       {
-        query: GET_NECTAR,
+        query: GET_NECTAR_PROJECTS,
         variables: { id: 1 },
       }
     );
     expect(res.data.nectar.name).toBe('active_learning');
+    expect(Array.isArray(res.data.nectar.projects)).toBe(true);
   });
 
   test('Get all the info of person 1', async() => {

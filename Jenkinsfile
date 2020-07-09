@@ -68,7 +68,7 @@ pipeline {
         stage('Run tests') {
             steps {
                 echo "Testing dashboard-graphql project"
-                sh "npm run test:prod"
+                sh "npm run test:ci"
             }
         }
   

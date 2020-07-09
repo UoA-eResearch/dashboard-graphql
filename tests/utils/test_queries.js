@@ -220,5 +220,69 @@ query Project($id: Int!) {
       }
     }
   }
-}
-`;
+}`;
+
+export const GET_VM_PROJECTS = gql`
+query ResearchVMService($id: Int!) {
+  researchvm(id: $id) {
+    name
+    projects {
+      id
+      project {
+        id
+      }
+    }
+  }
+}`;
+
+export const GET_STORAGE_PROJECTS = gql`
+query ResearchStorageService($id: Int!) {
+  researchstorage(id: $id) {
+    name
+    projects {
+      id
+      project {
+        id
+      }
+    }
+  }
+}`;
+
+export const GET_NECTAR_PROJECTS = gql`
+query NectarService($id: Int!) {
+  nectar(id: $id) {
+    name
+    projects {
+      id
+      project {
+        id
+      }
+    }
+  }
+}`;
+
+export const GET_DROPBOX_PROJECTS = gql`
+query DropBoxService($id: Int!) {
+  dropbox(id: $id) {
+    name
+    projects {
+      id
+      project {
+        id
+      }
+    }
+  }
+}`;
+
+export const GET_VIS_PROJECTS = gql`
+query VisualisationService($id: Int!) {
+  visualisation(id: $id) {
+    name
+    projects {
+      id
+      project {
+        id
+      }
+    }
+  }
+}`;
