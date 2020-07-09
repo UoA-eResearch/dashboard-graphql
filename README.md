@@ -51,6 +51,7 @@ NOTE: Jest is set up to get required env variables like the eResearch project AP
 npm run deploy
 ```
 Note: API Gateway API mapping needs to be configured after first deployment.
+# TODO: update this section, using serverless-domain-manager plugin now
 - using AWS CLI:
 ```
 aws apigateway create-base-path-mapping

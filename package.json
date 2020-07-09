@@ -13,15 +13,16 @@
   "devDependencies": {
     "@unly/serverless-env-copy-plugin": "^1.0.4",
     "apollo-server-testing": "^2.14.2",
-    "dotenv": "^8.2.0",
-    "serverless-bundle": "^1.6.0",
-    "serverless-offline": "^6.1.7",
     "artillery": "^1.6.0-27",
+    "dotenv": "^8.2.0",
+    "easygraphql-load-tester": "^0.3.8",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.2",
     "minimist": "^1.2.0",
-    "easygraphql-load-tester": "^0.3.8",
-    "ora": "^3.2.0"
+    "ora": "^3.2.0",
+    "serverless-bundle": "^1.6.0",
+    "serverless-domain-manager": "^4.1.1",
+    "serverless-offline": "^6.1.7"
   },
   "scripts": {
     "start": "sls offline",
