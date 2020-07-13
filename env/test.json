@@ -16,7 +16,8 @@
         ],
         "cognitoAppClientLogoutUrls": [
             "TBD"
-        ]
+        ],
+        "kmsUoaCentralKeyId": "c842cc4b-978e-4c77-99c4-93269591181c"
     },
     "app": {
         "NODE_ENV": "test",

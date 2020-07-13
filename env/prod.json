@@ -16,7 +16,8 @@
         ],
         "cognitoAppClientLogoutUrls": [
             "TBD"
-        ]
+        ],
+        "kmsUoaCentralKeyId": "180f8f50-c1f3-4b9a-b793-0fca514ab708"
     },
     "app": {
         "NODE_ENV": "production",

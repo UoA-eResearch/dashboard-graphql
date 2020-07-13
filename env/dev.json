@@ -19,7 +19,8 @@
             "http://localhost:4200",
             "https://domx0qy8opg01.cloudfront.net"
         ],
-        "cognitoResourceServerName": "my-domain"
+        "cognitoResourceServerName": "my-domain",
+        "kmsUoaCentralKeyId": "3cf7aeb4-ad8c-4505-a8e3-7d2a556e188d"
     },
     "app": {
         "NODE_ENV": "test",
