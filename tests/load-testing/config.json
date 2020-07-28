@@ -1,6 +1,6 @@
 {
     "config": {
-      "url": "http://localhost:4000/dev/graphql",
+      "url": "http://localhost:4000/dev",
       "name": "Testing the dashboard graphql server",
       "selectedQueries": ["person"],
       "queryFile": true,
