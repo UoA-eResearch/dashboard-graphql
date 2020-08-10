@@ -94,7 +94,7 @@ sls invoke -f serverless-now
 * For general Serverless Framework help run: `sls help`
 
 ## CI/CD
-When updates to this repo are pushed to the **sandbox**, **nonprod**, or **prod** branches, a Github webhook triggers one of three corresponding jobs in the UoA production Jenkins server.
+When updates to this repo are pushed to the **sandbox**, **nonprod**, or **prod** branches (which correspond to the 3 UoA AWS environments), a Github webhook triggers one of three corresponding jobs in the UoA production Jenkins server.
 The Jenkins server uses the configurations set in its' environment for setting up access to the AWS resources/accounts/tags as well as deploying the stack on AWS. 
 The Jenkins pipeline that gets run is defined in the `Jenkinsfile` in this repository. The pipeline includes the following main stages:
 * Checkout

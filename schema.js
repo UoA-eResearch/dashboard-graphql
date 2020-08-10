@@ -89,8 +89,7 @@ const typeDefs = gql`
   type Project {
     id: Int!
     creation_date: String
-    # keep description out until more fine-grained auth is implemented:
-    # description: String
+    description: String
     division: String
     end_date: String
     "A list of external references related to the project"
