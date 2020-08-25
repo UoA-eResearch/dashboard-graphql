@@ -34,11 +34,7 @@ export async function getUserInfo(event) {
       return data;
     }
   } catch (e) {
-    if (process.env.ENV === 'dev') {
-      console.log(`Error getting user info: ${e}`);
-    } else {
-      throw new AuthenticationError(`Error getting user info: ${e}`);
-    }
+    throw new AuthenticationError(`Error getting user info: ${e}`);
   }
 };
 

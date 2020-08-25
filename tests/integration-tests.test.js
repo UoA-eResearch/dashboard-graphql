@@ -11,7 +11,10 @@ import {
   GET_NECTAR_PROJECTS,
   GET_ALL_INFO_OF_A_PERSON,
   GET_ALL_INFO_OF_A_PROJECT,
-  QUERY_DEPTH_OVER_5 } from './utils/test_queries';
+  QUERY_DEPTH_OVER_5,
+  GET_ALL_PROJECTS,
+  GET_ALL_PEOPLE,
+} from './utils/test_queries';
 
 
 // create a test server using the real typeDefs, resolvers and datasources
@@ -154,6 +157,28 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
     );
     expect(res.errors[0].message).toContain(
       'exceeds maximum operation depth of 5');
+  });
+
+  test('Check non-admin user cannot query all projects', async() => {
+    const res = await query(
+      {
+        query: GET_ALL_PROJECTS,
+      }
+    );
+    console.log(res.errors[0].message);
+    expect(res.errors[0].message).toContain(
+      'User not authorized. Admin only.');
+  });
+
+  test('Check non-admin user cannot query all people', async() => {
+    const res = await query(
+      {
+        query: GET_ALL_PEOPLE,
+      }
+    );
+    console.log(res.errors[0].message);
+    expect(res.errors[0].message).toContain(
+      'User not authorized. Admin only.');
   });
 
 });

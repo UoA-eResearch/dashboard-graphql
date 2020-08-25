@@ -286,3 +286,17 @@ query VisualisationService($id: Int!) {
     }
   }
 }`;
+
+export const GET_ALL_PROJECTS = gql`
+query Projects {
+  projects {
+    id
+  }
+}`;
+
+export const GET_ALL_PEOPLE = gql`
+query People {
+  people {
+    id
+  }
+}`;

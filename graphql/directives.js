@@ -39,7 +39,10 @@ export class AuthorizationDirective extends SchemaDirectiveVisitor {
 
         const context = args[2];
 
-        if (!context.user.roles?.includes(requiredRole)) {
+        if (
+          !context.user.hasOwnProperty('roles') ||
+          !context.user.roles.includes(requiredRole)
+        ) {
           throw new AuthenticationError('User not authorized. Admin only.');
         }
 

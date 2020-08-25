@@ -22,7 +22,6 @@ const server = new ApolloServer({
     functionName: context.functionName,
     event,
     context,
-    // optional: get user info from cognito - e.g. group membership
     user: await getUserInfo(event),
   }),
   validationRules: [
