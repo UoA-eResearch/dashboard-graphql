@@ -1,25 +1,29 @@
 import { ApolloServer } from 'apollo-server-lambda';
 import depthLimit from 'graphql-depth-limit';
-import { typeDefs } from './schema';
-import { resolvers } from './resolvers';
+import { typeDefs } from './graphql/schema';
+import { resolvers } from './graphql/resolvers';
+import { AuthorizationDirective } from './graphql/directives';
 import { EResearchProjectAPI } from './datasources/eresearch-project-api';
 import { getUserInfo } from './helpers/auth';
 
 const server = new ApolloServer({
   typeDefs,
+  schemaDirectives: {
+    authorization: AuthorizationDirective,
+  },
   resolvers,
   dataSources: () => {
     return {
       eresAPI: new EResearchProjectAPI(),
     };
   },
-  context: ({ event, context }) => ({
+  context: async({ event, context }) => ({
     headers: event.headers,
     functionName: context.functionName,
     event,
     context,
     // optional: get user info from cognito - e.g. group membership
-    user: process.env.ENV === 'dev' ? '' : getUserInfo(event),
+    user: await getUserInfo(event),
   }),
   validationRules: [
     depthLimit(

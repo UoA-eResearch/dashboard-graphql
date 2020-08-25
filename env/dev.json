@@ -27,6 +27,8 @@
         "COGNITO_DOMAIN": "uoapool-sandbox",
         "PROJECT_DB_BASE_URL": "https://api.test.auckland.ac.nz/service/eresearch-project/v1",
         "PROJECT_DB_API_KEY": "${ssm:/dev/cer-dashboard/projectdb_apikey_test~true}",
+        "REGROUP_V2_API_BASE_URL": "https://api.test.auckland.ac.nz/service/regroup/v2",
+        "REGROUP_V2_API_KEY": "${ssm:/dev/cer-dashboard/regroup_v2_apikey_test~true}",
         "authorisedGroupmembershipList": "Employee.psrwi",
         "awsApiGatewayOauthScopes": [
             "https://my-domain.auckland.ac.nz/angular-test"

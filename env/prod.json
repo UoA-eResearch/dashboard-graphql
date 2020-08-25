@@ -24,6 +24,8 @@
         "COGNITO_DOMAIN": "TBD",
         "PROJECT_DB_BASE_URL": "https://api.auckland.ac.nz/service/eresearch-project/v1",
         "PROJECT_DB_API_KEY": "TBD",
+        "REGROUP_V2_API_BASE_URL": "https://api.auckland.ac.nz/service/regroup/v2",
+        "REGROUP_V2_API_KEY": "TBD",
         "authorisedGroupmembershipList": "TBD",
         "awsApiGatewayOauthScopes": [
             "TBD"

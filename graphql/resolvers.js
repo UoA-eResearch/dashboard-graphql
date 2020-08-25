@@ -4,8 +4,14 @@ export const resolvers = {
       return dataSources.eresAPI.personFindByIdentity(
         args.username);
     },
+    people: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.getPeople();
+    },
     person: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.getPerson(args.id);
+    },
+    projects: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.getProjects();
     },
     project: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.getProject(args.id);

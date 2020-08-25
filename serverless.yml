@@ -48,6 +48,8 @@ provider:
     NODE_ENV: ${file(env/${self:provider.stage}.json):app.NODE_ENV}
     PROJECT_DB_BASE_URL: ${file(env/${self:provider.stage}.json):app.PROJECT_DB_BASE_URL}
     PROJECT_DB_API_KEY: ${file(env/${self:provider.stage}.json):app.PROJECT_DB_API_KEY}
+    REGROUP_V2_API_BASE_URL: ${file(env/${self:provider.stage}.json):app.REGROUP_V2_API_BASE_URL}
+    REGROUP_V2_API_KEY: ${file(env/${self:provider.stage}.json):app.REGROUP_V2_API_KEY}
     COGNITO_DOMAIN: ${file(env/${self:provider.stage}.json):app.COGNITO_DOMAIN}
     REGION: ${self:provider.region}
     CORS_ACCESS_CONTROL_ALLOW_ORIGINS: "${file(env/${self:provider.stage}.json):app.CORS_ACCESS_CONTROL_ALLOW_ORIGINS}"
