@@ -160,25 +160,90 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
   });
 
   test('Check non-admin user cannot query all projects', async() => {
+    // create a new instance of test server, pass in user without admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_ALL_PROJECTS,
       }
     );
-    console.log(res.errors[0].message);
     expect(res.errors[0].message).toContain(
       'User not authorized. Admin only.');
   });
 
   test('Check non-admin user cannot query all people', async() => {
+    // create a new instance of test server, pass in user without admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_ALL_PEOPLE,
       }
     );
-    console.log(res.errors[0].message);
     expect(res.errors[0].message).toContain(
       'User not authorized. Admin only.');
+  });
+
+  test('Check admin user can query all projects', async() => {
+    // create a new instance of test server, pass in user with admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
+    const expected = [{ id: 1 }, { id: 2 }];
+    const res = await query(
+      {
+        query: GET_ALL_PROJECTS,
+      }
+    );
+    // matches even if received contains additional elements:
+    expect(res.data.projects).toEqual(expect.arrayContaining(expected));
+  });
+
+  test('Check admin user can query all people', async() => {
+    // create a new instance of test server, pass in user with admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
+    const expected = [{ id: 1 }, { id: 2 }];
+    const res = await query(
+      {
+        query: GET_ALL_PEOPLE,
+      }
+    );
+
+    // matches even if received contains additional elements:
+    expect(res.data.people).toEqual(expect.arrayContaining(expected));
   });
 
 });

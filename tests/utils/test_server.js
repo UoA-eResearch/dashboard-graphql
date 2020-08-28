@@ -19,9 +19,7 @@ export const constructTestServer = (dataSources, context) => {
       },
       resolvers,
       dataSources,
-      context: async() => ({
-        user: {},
-      }),
+      context,
       validationRules,
     })
   );

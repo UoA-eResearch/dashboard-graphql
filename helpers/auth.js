@@ -41,6 +41,9 @@ export async function getUserInfo(event) {
 
 export async function getUserGroups(upi) {
   try {
+    if (upi === undefined) {
+      throw new Error('No upi given.');
+    }
     const baseURL = process.env.REGROUP_V2_API_BASE_URL;
     const apiKey = process.env.REGROUP_V2_API_KEY;
     const headers = {
@@ -51,13 +54,12 @@ export async function getUserGroups(upi) {
       `${baseURL}/user/${upi}/membership`, {headers: headers}
     );
     const groups = await response.json();
+    if (groups.total === 0) {
+      throw new Error('User has no groups. Check if UPI is valid.');
+    }
     return groups;
   } catch (e) {
-    if (process.env.ENV === 'dev') {
-      console.log(`Error getting user groups: ${e}`);
-    } else {
-      throw new AuthenticationError(`Error getting user groups: ${e}`);
-    }
+    throw new AuthenticationError(`Error getting user groups: ${e}`);
   }
 };
 
@@ -79,10 +81,6 @@ export async function getUserRoles(groups) {
     return roles;
 
   } catch (e) {
-    if (process.env.ENV === 'dev') {
-      console.log(`Error checking user roles: ${e}`);
-    } else {
-      throw new AuthenticationError(`Error checking user roles: ${e}`);
-    }
+    throw new AuthenticationError(`Error checking user roles: ${e}`);
   }
 }
