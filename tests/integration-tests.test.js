@@ -61,6 +61,16 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
   });
 
   test('Check the title of project 1', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_PROJECT,
@@ -139,6 +149,16 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
   });
 
   test('Get all the info of project 1', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_ALL_INFO_OF_A_PROJECT,
@@ -177,7 +197,7 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
       }
     );
     expect(res.errors[0].message).toContain(
-      'User not authorized. Admin only.');
+      'Not Authorised!');
   });
 
   test('Check non-admin user cannot query all people', async() => {
@@ -198,7 +218,7 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
       }
     );
     expect(res.errors[0].message).toContain(
-      'User not authorized. Admin only.');
+      'Not Authorised!');
   });
 
   test('Check admin user can query all projects', async() => {

@@ -30,6 +30,7 @@ export async function getUserInfo(event) {
       throw new AuthenticationError(data.error);
     } else {
       const groups = await getUserGroups(data.preferred_username);
+      data['groups'] = groups;
       data['roles'] = await getUserRoles(groups);
       return data;
     }
@@ -57,7 +58,11 @@ export async function getUserGroups(upi) {
     if (groups.total === 0) {
       throw new Error('User has no groups. Check if UPI is valid.');
     }
-    return groups;
+    // filter groups to only CeR-related groups (eresearch.auckland.ac.nz)
+    const cerGroups = groups.memberships.filter((membership) => {
+      return membership.memberid.includes('eresearch.auckland.ac.nz');
+    });
+    return cerGroups;
   } catch (e) {
     throw new AuthenticationError(`Error getting user groups: ${e}`);
   }
@@ -68,8 +73,8 @@ export async function getUserRoles(groups) {
   try {
     let roles = [];
 
-    if (groups.memberships.length > 0) {
-      let isAdmin = groups.memberships.some(
+    if (groups.length > 0) {
+      let isAdmin = groups.some(
         item => item.memberid === 'eresearch.auckland.ac.nz:cerapps'
       );
 

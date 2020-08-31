@@ -49,7 +49,7 @@ describe('Unit Tests', () => {
     */
     const upi = 'rmcc872';
     const res = await getUserGroups(upi);
-    expect(res.memberships).toBeTruthy();
+    expect(res.length > 0).toBeTruthy();
   });
 
   test('getUserGroups throws an error', async() => {
@@ -65,13 +65,10 @@ describe('Unit Tests', () => {
     /* tests that the getUserRoles function correctly assigns an admin role
        for a user who is a cerapps group member
     */
-    const groups = {
-      total: 1,
-      memberships: [{
-        memberid: 'eresearch.auckland.ac.nz:cerapps',
-        type: 'Direct',
-      }],
-    };
+    const groups = [{
+      memberid: 'eresearch.auckland.ac.nz:cerapps',
+      type: 'Direct',
+    }];
     const expected = ['ADMIN'];
     const res = await getUserRoles(groups);
     expect(res).toEqual(expect.arrayContaining(expected));
@@ -95,10 +92,8 @@ describe('Unit Tests', () => {
 
   test('getUserRoles throws an error', async() => {
     /* tests that the getUserRoles function throws an error for
-       invalid or undefined groups
+       undefined groups
     */
-    const groups = {};
-    await expect(getUserRoles(groups)).rejects.toThrow(AuthenticationError);
     await expect(getUserRoles()).rejects.toThrow(AuthenticationError);
   });
 

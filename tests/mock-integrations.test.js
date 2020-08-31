@@ -96,6 +96,16 @@ describe('Mock integration tests for EResearchProjectAPI', () => {
   });
 
   test('fetches single project by id', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       { query: GET_PROJECT, variables: { id: 1 } }
     );

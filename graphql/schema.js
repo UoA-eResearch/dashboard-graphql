@@ -1,17 +1,6 @@
 import { gql } from 'apollo-server-lambda';
 
 const typeDefs = gql`
-  
-  "Custom Directive for authorization. Role defaults to admin."
-  directive @authorization(
-    requires: AccessRole = ADMIN,
-  ) on OBJECT | FIELD_DEFINITION
-
-  "Possible access levels over a normal user"
-  enum AccessRole {
-    ADMIN
-  }
-
   "Root Query type"
   type Query {
     """
@@ -23,7 +12,7 @@ const typeDefs = gql`
     """
     Fetches all people.
     """
-    people: [Person] @authorization(requires: ADMIN)
+    people: [Person]
     """
     Fetches a person given their ID.
     #### Arguments:
@@ -33,7 +22,7 @@ const typeDefs = gql`
     """
     Fetches all projects.
     """
-    projects: [Project] @authorization(requires: ADMIN)
+    projects: [Project]
     """
     Fetches a project given its ID.
     #### Arguments:
