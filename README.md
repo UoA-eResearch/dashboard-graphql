@@ -20,7 +20,8 @@ npm install
 ```
 
 3. Obtain Temporary AWS credentials for UoA (**Note:** only valid for 1 hour):
-Running and testing locally will not succeed without AWS credentials. These can be accessed on the here: [Auckland Uni wiki](https://wiki.auckland.ac.nz/pages/viewpage.action?spaceKey=UC&title=AWS+Temporary+Credentials+for+CLI)
+Running and testing locally will not succeed without AWS credentials. Instructions for accessing the credentials are on the [Auckland Uni wiki](https://wiki.auckland.ac.nz/pages/viewpage.action?spaceKey=UC&title=AWS+Temporary+Credentials+for+CLI).
+
 * Make sure that the credentials are located in ~/.aws/credentials and take note of the profile for the credentials. Currently "saml" is the default profile at the time of writing this.
 * Passing in the aws credentials to the deploy and test commands can be done by adding arguments after a double dash to the run/test commands. This applies to any npm command.
 e.g.
@@ -37,7 +38,7 @@ npm start
 * Inside Visual Studio Code hit `F5` and select `Debug` as config file (this config is for Windows. If you are using Linux, select the `Debug Linux` config). Attach breakpoints as desired.
 
 ## Code Linting
-* To lint your code with ESLint:
+* To lint your code with ESLint (linting also runs automatically prior to running unit tests):
 ```
 npm run pretest
 ```

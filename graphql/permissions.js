@@ -1,4 +1,4 @@
-import { rule, shield, or } from 'graphql-shield';
+import { rule, shield, race } from 'graphql-shield';
 
 const isAdmin = rule({ cache: 'contextual' })(
   async(parent, args, context, info) => {
@@ -36,8 +36,8 @@ export const permissions = shield(
     Query: {
       people: isAdmin,
       projects: isAdmin,
-      project: or(isAdmin, isProjectMember),
+      project: race(isAdmin, isProjectMember),
     },
-    Project: or(isAdmin, isProjectMember),
+    Project: race(isAdmin, isProjectMember),
   },
 );
