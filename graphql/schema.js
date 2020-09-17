@@ -59,6 +59,12 @@ const typeDefs = gql`
     id: ID (from the eRes Project DB) of the Nectar allocation.
     """
     nectar(id: Int!): NectarService
+    """
+    Fetches members of a group given its ID.
+    #### Arguments:
+    id: ID of the group. E.g.: eresearch.auckland.ac.nz:rvmf00088_vmuser
+    """
+    groupmembers(id: String!): GroupMembers
   }
 
   "Details about a person's identity and projects"
@@ -468,6 +474,17 @@ const typeDefs = gql`
     ro_group: String
     rw_group: String
     t_group: String
+  }
+
+  type GroupMembers {
+    total: Int
+    users: [GroupMember]
+  }
+
+  type GroupMember {
+    id: String
+    username: String
+    name: String
   }
 `;
 

@@ -3,6 +3,7 @@ import depthLimit from 'graphql-depth-limit';
 import { typeDefs } from './graphql/schema';
 import { resolvers } from './graphql/resolvers';
 import { EResearchProjectAPI } from './datasources/eresearch-project-api';
+import { GrouperAPI } from './datasources/grouper-api';
 import { getUserInfo } from './helpers/auth';
 import { applyMiddleware } from 'graphql-middleware';
 import { permissions } from './graphql/permissions';
@@ -32,6 +33,7 @@ const server = new ApolloServer({
   dataSources: () => {
     return {
       eresAPI: new EResearchProjectAPI(),
+      grouperAPI: new GrouperAPI(),
     };
   },
   // apply query validation rules

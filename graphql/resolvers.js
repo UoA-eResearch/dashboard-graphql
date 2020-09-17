@@ -31,6 +31,9 @@ export const resolvers = {
     visualisation: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.getVis(args.id);
     },
+    groupmembers: (parent, args, { dataSources }) => {
+      return dataSources.grouperAPI.getGroupMembers(args.id);
+    },
   },
   Person: {
     divisions: (parent, args, { dataSources }) => {
