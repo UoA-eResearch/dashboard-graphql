@@ -10,7 +10,7 @@ const typeDefs = gql`
     """
     user(username: String!): Person
     """
-    Fetches all people.
+    Fetches all people. ADMIN ONLY - see permissions.js.
     """
     people: [Person]
     """
@@ -20,7 +20,7 @@ const typeDefs = gql`
     """
     person(id: Int!): Person
     """
-    Fetches all projects.
+    Fetches all projects. ADMIN ONLY - see permissions.js.
     """
     projects: [Project]
     """
@@ -393,6 +393,8 @@ const typeDefs = gql`
     uuid: String
     "A list of projects related to this research vm service"
     projects: [ServiceProject]
+    "The access groups of the research vm service"
+    groups: ResearchVMServiceGroup
   }
 
   "Details of a Research Storage Service"
@@ -409,6 +411,8 @@ const typeDefs = gql`
     used_gb: Float
     "A list of projects related to this research storage service"
     projects: [ServiceProject]
+    "The access groups of the research storage service"
+    groups: ResearchDriveServiceGroup
   }
 
   "Details of a Nectar Service"
@@ -447,6 +451,23 @@ const typeDefs = gql`
     last_day: String
     "Details about the project"
     project: Project
+  }
+
+  "Details about the access groups associated with a research vm service"
+  type ResearchVMServiceGroup {
+    id: Int!
+    admin_group: String
+    rw_group: String
+    user_group: String
+  }
+
+  "Details about the access groups associated with a research drive service"
+  type ResearchDriveServiceGroup {
+    id: Int!
+    adm_group: String
+    ro_group: String
+    rw_group: String
+    t_group: String
   }
 `;
 

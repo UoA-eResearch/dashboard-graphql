@@ -114,10 +114,16 @@ export const resolvers = {
     projects: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.get(`vm/${parent.id}/project`);
     },
+    groups: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.get(`vm/${parent.id}/group`);
+    },
   },
   ResearchStorageService: {
     projects: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.get(`researchdrive/${parent.id}/project`);
+    },
+    groups: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.get(`researchdrive/${parent.id}/group`);
     },
   },
   NectarService: {
