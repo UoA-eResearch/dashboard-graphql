@@ -60,11 +60,11 @@ const typeDefs = gql`
     """
     nectar(id: Int!): NectarService
     """
-    Fetches members of a group given its ID.
+    Fetches members of a group or groups, given an array of group names.
     #### Arguments:
-    id: ID of the group. E.g.: eresearch.auckland.ac.nz:rvmf00088_vmuser
+    groupnames: names of groups. E.g.: rvmf00088_vmuser
     """
-    groupmembers(id: String!): GroupMembers
+    groupmembers(groupnames: [String]!): [GroupMembers]
   }
 
   "Details about a person's identity and projects"
@@ -478,6 +478,7 @@ const typeDefs = gql`
 
   type GroupMembers {
     total: Int
+    groupname: String
     users: [GroupMember]
   }
 

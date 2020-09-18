@@ -32,7 +32,7 @@ export const resolvers = {
       return dataSources.eresAPI.getVis(args.id);
     },
     groupmembers: (parent, args, { dataSources }) => {
-      return dataSources.grouperAPI.getGroupMembers(args.id);
+      return dataSources.grouperAPI.getGroupMembers(args.groupnames);
     },
   },
   Person: {
