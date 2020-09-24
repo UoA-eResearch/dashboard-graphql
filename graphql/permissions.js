@@ -40,4 +40,7 @@ export const permissions = shield(
     },
     Project: race(isAdmin, isProjectMember),
   },
+  {
+    allowExternalErrors: true,
+  }
 );
