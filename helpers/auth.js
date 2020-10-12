@@ -15,17 +15,22 @@
 
 import { AuthenticationError } from 'apollo-server-lambda';
 import fetch from 'node-fetch';
+import { performance } from 'perf_hooks';
 
 const utils = require('@uoa/utilities');
 
 export async function getUserInfo(event) {
   // Get user from token
+  const t0 = performance.now();
   try {
     let data = await utils.getUserInfo(
       event,
       process.env.COGNITO_DOMAIN + '.auth.' +
       process.env.REGION + '.amazoncognito.com'
     );
+    const t1 = performance.now();
+    console.log(`Call to getUserInfo took ${t1 - t0} milliseconds.`);
+
     if (data.error) {
       throw new AuthenticationError(data.error);
     } else {
@@ -41,6 +46,7 @@ export async function getUserInfo(event) {
 
 
 export async function getUserGroups(upi) {
+  const t0 = performance.now();
   try {
     if (upi === undefined) {
       throw new Error('No upi given.');
@@ -54,15 +60,26 @@ export async function getUserGroups(upi) {
     const response = await fetch(
       `${baseURL}/user/${upi}/membership`, {headers: headers}
     );
-    const groups = await response.json();
-    if (groups.total === 0) {
-      throw new Error('User has no groups. Check if UPI is valid.');
+
+    if (response.ok) {
+      const groups = await response.json();
+      if (groups.total === 0) {
+        throw new Error('User has no groups. Check if UPI is valid.');
+      }
+      // filter groups to only CeR-related groups (eresearch.auckland.ac.nz)
+      const cerGroups = groups.memberships.filter((membership) => {
+        return membership.memberid.includes('eresearch.auckland.ac.nz');
+      });
+      const t1 = performance.now();
+      console.log(`Call to getUserGroups took ${t1 - t0} milliseconds.`);
+      return cerGroups;
+    } else {
+      const err = await response.json();
+      throw new Error(
+        `${response.status} Grouper Error message: ${err.message}`
+      );
     }
-    // filter groups to only CeR-related groups (eresearch.auckland.ac.nz)
-    const cerGroups = groups.memberships.filter((membership) => {
-      return membership.memberid.includes('eresearch.auckland.ac.nz');
-    });
-    return cerGroups;
+
   } catch (e) {
     throw new AuthenticationError(`Error getting user groups: ${e}`);
   }

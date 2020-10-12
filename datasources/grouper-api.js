@@ -1,4 +1,5 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
+import { performance } from 'perf_hooks';
 
 export class GrouperAPI extends RESTDataSource {
   constructor() {
@@ -12,6 +13,8 @@ export class GrouperAPI extends RESTDataSource {
   }
 
   async getGroupMembers(groupnames) {
+    const t0 = performance.now();
+    groupnames = [].concat(groupnames); // handle string to array
     let results = [];
     for (var i = 0; i < groupnames.length; i++) {
       // convert groupnames to group id in regroup api format
@@ -21,6 +24,9 @@ export class GrouperAPI extends RESTDataSource {
       result['groupname'] = groupnames[i];
       results.push(result);
     }
+    const t1 = performance.now();
+    console.log(
+      `Call to Grouper API getGroupMembers took ${t1 - t0} milliseconds.`);
     return results;
   }
 }
