@@ -1,5 +1,6 @@
 import { constructTestServer } from './utils/test_server';
 import { EResearchProjectAPI } from '../datasources/eresearch-project-api';
+import { GrouperAPI } from '../datasources/grouper-api';
 import {
   GET_USER,
   GET_PERSON,
@@ -14,6 +15,12 @@ import {
   QUERY_DEPTH_OVER_5,
   GET_ALL_PROJECTS,
   GET_ALL_PEOPLE,
+  GET_VM,
+  GET_STORAGE,
+  GET_NECTAR,
+  GET_VIS,
+  GET_DROPBOX,
+  GET_GROUPMEMBERS,
 } from './utils/test_queries';
 
 
@@ -22,7 +29,8 @@ import {
 // See https://www.apollographql.com/docs/apollo-server/testing/mocking/
 // See also mock-integrations.test.js
 const eresAPI = new EResearchProjectAPI();
-const { query } = constructTestServer(() => ({eresAPI}));
+const grouperAPI = new GrouperAPI();
+const { query } = constructTestServer(() => ({eresAPI, grouperAPI}));
 
 describe('Basic query -> resolver -> REST API -> schema tests', () => {
   /* Test suite for full integration tests where we are testing a query against
@@ -37,7 +45,7 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
      - GraphQL throws an error
      - The external service (e.g. the eResearch Project API)
        has changed or is unavailable
-     - (Anything else?)
+     - Changes are made to schema permissions
   */
 
   test('Check the person Id of username gsou008', async() => {
@@ -82,6 +90,16 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
   });
 
   test('Check the name and projects of dropbox service 1', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_DROPBOX_PROJECTS,
@@ -93,6 +111,16 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
   });
 
   test('Check the name and projects of visualisation service 1', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_VIS_PROJECTS,
@@ -104,6 +132,16 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
   });
 
   test('Check the name and projects of researchvm service 1', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_VM_PROJECTS,
@@ -115,6 +153,16 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
   });
 
   test('Check the name and projects of researchstorage service 1', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_STORAGE_PROJECTS,
@@ -126,6 +174,16 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
   });
 
   test('Check the name and projects of nectar service 1', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       {
         query: GET_NECTAR_PROJECTS,
@@ -264,6 +322,260 @@ describe('Basic query -> resolver -> REST API -> schema tests', () => {
 
     // matches even if received contains additional elements:
     expect(res.data.people).toEqual(expect.arrayContaining(expected));
+  });
+
+  test('Check non-admin user cannot query a vm', async() => {
+    // create a new instance of test server, pass in user without admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+          },
+        }
+      )
+    );
+    const res = await query(
+      {
+        query: GET_VM,
+        variables: { id: 1 },
+      }
+    );
+    expect(res.errors[0].message).toContain(
+      'Not Authorised!');
+  });
+
+  test('Check non-admin user cannot query a research drive', async() => {
+    // create a new instance of test server, pass in user without admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+          },
+        }
+      )
+    );
+    const res = await query(
+      {
+        query: GET_STORAGE,
+        variables: { id: 1 },
+      }
+    );
+    expect(res.errors[0].message).toContain(
+      'Not Authorised!');
+  });
+
+  test('Check non-admin user cannot query a nectar', async() => {
+    // create a new instance of test server, pass in user without admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+          },
+        }
+      )
+    );
+    const res = await query(
+      {
+        query: GET_NECTAR,
+        variables: { id: 1 },
+      }
+    );
+    expect(res.errors[0].message).toContain(
+      'Not Authorised!');
+  });
+
+  test('Check non-admin user cannot query a vis', async() => {
+    // create a new instance of test server, pass in user without admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+          },
+        }
+      )
+    );
+    const res = await query(
+      {
+        query: GET_VIS,
+        variables: { id: 1 },
+      }
+    );
+    expect(res.errors[0].message).toContain(
+      'Not Authorised!');
+  });
+
+  test('Check non-admin user cannot query a dropbox', async() => {
+    // create a new instance of test server, pass in user without admin role
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+          },
+        }
+      )
+    );
+    const res = await query(
+      {
+        query: GET_DROPBOX,
+        variables: { id: 1 },
+      }
+    );
+    expect(res.errors[0].message).toContain(
+      'Not Authorised!');
+  });
+
+  test('Get the members of a group', async() => {
+    const groupNames = ['rvmf00097_vmadmin'];
+    const res = await query(
+      {
+        query: GET_GROUPMEMBERS,
+        variables: { groupnames: groupNames },
+      }
+    );
+    expect(res.data.groupmembers[0].total).toBeGreaterThan(0);
+    expect(res.data.groupmembers[0].groupname).toBe('rvmf00097_vmadmin');
+    expect(res.data.groupmembers[0].users.length).toBeGreaterThan(0);
+  });
+
+  test('Querying an invalid group gives users null', async() => {
+    const groupNames = ['abc'];
+    const res = await query(
+      {
+        query: GET_GROUPMEMBERS,
+        variables: { groupnames: groupNames },
+      }
+    );
+    expect(res.data.groupmembers[0].total).toBe(0);
+    expect(res.data.groupmembers[0].groupname).toBe('abc');
+    expect(res.data.groupmembers[0].users).toBeNull();
+  });
+
+  test('Non service member cannot get a vm', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI, grouperAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+            preferred_username: 'rmcc872',
+          },
+        }
+      )
+    );
+    const res = await query(
+      { query: GET_VM, variables: { id: 1 } }
+    );
+
+    expect(res.errors[0].message).toContain(
+      'Not Authorised!');
+  });
+
+  test('Service member can get a vm', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI, grouperAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+            preferred_username: 'atri027',
+          },
+        }
+      )
+    );
+    const res = await query(
+      { query: GET_VM, variables: { id: 1 } }
+    );
+
+    expect(res.data.researchvm.name).toBe('ceratriprd01');
+  });
+
+  test('Non service member cannot get a dropbox', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI, grouperAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+            preferred_username: 'rmcc872',
+          },
+        }
+      )
+    );
+    const res = await query(
+      { query: GET_DROPBOX, variables: { id: 1 } }
+    );
+
+    expect(res.errors[0].message).toContain(
+      'Not Authorised!');
+  });
+
+  test('Service member can get a dropbox', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI, grouperAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+            preferred_username: 'rmcc872',
+          },
+        }
+      )
+    );
+    const res = await query(
+      { query: GET_DROPBOX, variables: { id: 343 } }
+    );
+
+    expect(res.data.dropbox.name).toBe('complex-contagion');
+  });
+
+  test('Non project member cannot get a project', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI, grouperAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+            preferred_username: 'rmcc872',
+          },
+        }
+      )
+    );
+    const res = await query(
+      { query: GET_PROJECT, variables: { id: 1 } }
+    );
+
+    expect(res.errors[0].message).toContain(
+      'Not Authorised!');
+  });
+
+  test('Project member can get a project', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI, grouperAPI}),
+      () => (
+        {
+          user: {
+            roles: [],
+            preferred_username: 'rmcc872',
+          },
+        }
+      )
+    );
+    const res = await query(
+      { query: GET_PROJECT, variables: { id: 1005 } }
+    );
+
+    expect(res.data.project.title).toBe(
+      'Complex contagion of COVID-19');
   });
 
 });

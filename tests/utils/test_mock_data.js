@@ -31,3 +31,15 @@ export const mockGetDropboxResponse = {
 export const mockGetVisResponse = {
   name: 'legacy',
 };
+
+export const mockGetGroupmembersResponse = [{
+  total: 1,
+  groupname: 'resesw202000003_adm',
+  users: [
+    {
+      id: '1234567',
+      username: 'abcd123',
+      name: 'test',
+    },
+  ],
+}];

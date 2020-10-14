@@ -1,5 +1,6 @@
 // Adapted from https://learnitmyway.com/apollo-server-testing/
 import { EResearchProjectAPI } from '../datasources/eresearch-project-api';
+import { GrouperAPI } from '../datasources/grouper-api';
 import { constructTestServer } from './utils/test_server';
 import {
   GET_USER,
@@ -9,7 +10,9 @@ import {
   GET_VIS,
   GET_VM,
   GET_STORAGE,
-  GET_NECTAR } from './utils/test_queries';
+  GET_NECTAR,
+  GET_GROUPMEMBERS,
+} from './utils/test_queries';
 import {
   mockPersonFindByIdentityResponse,
   mockGetPersonResponse,
@@ -18,10 +21,13 @@ import {
   mockGetResearchDriveResponse,
   mockGetNectarResponse,
   mockGetDropboxResponse,
-  mockGetVisResponse } from './utils/test_mock_data';
+  mockGetVisResponse,
+  mockGetGroupmembersResponse,
+} from './utils/test_mock_data';
 
 
 const eresAPI = new EResearchProjectAPI();
+const grouperAPI = new GrouperAPI();
 
 // mock the dataSource's underlying fetch methods
 eresAPI.personFindByIdentity = jest.fn(
@@ -48,9 +54,12 @@ eresAPI.getDropbox = jest.fn(
 eresAPI.getVis = jest.fn(
   () => mockGetVisResponse
 );
+grouperAPI.getGroupMembers = jest.fn(
+  () => mockGetGroupmembersResponse
+);
 
 // create the test server to create a query function
-const { query } = constructTestServer(() => ({eresAPI}));
+const { query } = constructTestServer(() => ({eresAPI, grouperAPI}));
 
 describe('Mock integration tests for EResearchProjectAPI', () => {
   /* Test suite for mocked tests where we are testing a query against
@@ -63,7 +72,7 @@ describe('Mock integration tests for EResearchProjectAPI', () => {
     - someone adds a required field to the associated type definitions
     - someone accidentally renames the endpoint
     - GraphQL throws an error
-    - (Anything else?)
+    - Changes are made to schema permissions
   */
 
   test('fetches single person by username', async() => {
@@ -118,6 +127,16 @@ describe('Mock integration tests for EResearchProjectAPI', () => {
   });
 
   test('fetches single vm by id', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       { query: GET_VM, variables: { id: 1 } }
     );
@@ -130,6 +149,16 @@ describe('Mock integration tests for EResearchProjectAPI', () => {
   });
 
   test('fetches single research drive by id', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       { query: GET_STORAGE, variables: { id: 1 } }
     );
@@ -142,6 +171,16 @@ describe('Mock integration tests for EResearchProjectAPI', () => {
   });
 
   test('fetches single Nectar by id', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       { query: GET_NECTAR, variables: { id: 1 } }
     );
@@ -154,6 +193,16 @@ describe('Mock integration tests for EResearchProjectAPI', () => {
   });
 
   test('fetches single Dropbox by id', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       { query: GET_DROPBOX, variables: { id: 1 } }
     );
@@ -166,6 +215,16 @@ describe('Mock integration tests for EResearchProjectAPI', () => {
   });
 
   test('fetches single Vis by id', async() => {
+    const { query } = constructTestServer(
+      () => ({eresAPI}),
+      () => (
+        {
+          user: {
+            roles: ['ADMIN'],
+          },
+        }
+      )
+    );
     const res = await query(
       { query: GET_VIS, variables: { id: 1 } }
     );
@@ -175,6 +234,22 @@ describe('Mock integration tests for EResearchProjectAPI', () => {
     expect(eresAPI.getVis).toHaveBeenCalledWith(1);
 
     expect(res?.data?.visualisation).toEqual(mockGetVisResponse);
+  });
+
+  test('fetches a list of groupmembers', async() => {
+    const groupNames = ['test'];
+    const res = await query(
+      {
+        query: GET_GROUPMEMBERS,
+        variables: { groupnames: groupNames },
+      }
+    );
+
+    expect(res?.errors).toBe(undefined);
+
+    expect(grouperAPI.getGroupMembers).toHaveBeenCalledWith(groupNames);
+
+    expect(res?.data.groupmembers).toEqual(mockGetGroupmembersResponse);
   });
 
 });

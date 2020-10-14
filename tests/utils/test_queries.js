@@ -300,3 +300,16 @@ query People {
     id
   }
 }`;
+
+export const GET_GROUPMEMBERS = gql`
+query GroupMembers($groupnames: [String]!) {
+  groupmembers(groupnames: $groupnames) {
+    total
+    groupname
+    users {
+      id
+      username
+      name
+    }
+  }
+}`;
