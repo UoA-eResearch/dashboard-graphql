@@ -1,5 +1,4 @@
 import { rule, shield, race } from 'graphql-shield';
-import { performance } from 'perf_hooks';
 
 const serviceTypeLookup = {
   DropBoxService: 'dropbox',
@@ -11,24 +10,18 @@ const serviceTypeLookup = {
 
 const isAdmin = rule({ cache: 'contextual' })(
   async(parent, args, context, info) => {
-    console.log('Performing isAdmin check...');
-    const t0 = performance.now();
     if (
       !context.user.hasOwnProperty('roles') ||
       !context.user.roles.includes('ADMIN')
     ) {
       return false;
     }
-    const t1 = performance.now();
-    console.log(`Call to isAdmin took ${t1 - t0} milliseconds.`);
     return true;
   }
 );
 
 const isProjectMember = rule({ cache: 'strict' })(
   async(parent, args, { user, dataSources }, info) => {
-    console.log('Performing isProjectMember check...');
-    const t0 = performance.now();
     const projectId = parent ? parent.id : args.id;
     const currentUser = await dataSources.eresAPI.personFindByIdentity(
       user.preferred_username
@@ -40,9 +33,6 @@ const isProjectMember = rule({ cache: 'strict' })(
       // const person = await dataSources.eresAPI.get(member.person.href);
       const personId = parseInt(member.person.href.slice(8), 10);
       if (personId === currentUser.id) {
-        console.log('Match found! User may view the requested project.');
-        const t1 = performance.now();
-        console.log(`Call to isProjectMember took ${t1 - t0} milliseconds.`);
         return true;
       }
     }
@@ -52,34 +42,28 @@ const isProjectMember = rule({ cache: 'strict' })(
 
 const isServiceMember = rule({ cache: 'strict' })(
   async(parent, args, context, info) => {
-    console.log('Performing isServiceMember check...');
-    const t0 = performance.now();
-
     let serviceType;
     if (info.parentType.name === 'Query') { // it's a top-level query
       serviceType = serviceTypeLookup[info.returnType.name];
-      console.log(
-        'parent type: ' + JSON.stringify(info.parentType) +
-         ' return type: ' + JSON.stringify(info.returnType)
-      );
+      // console.log(
+      //   'parent type: ' + JSON.stringify(info.parentType) +
+      //    ' return type: ' + JSON.stringify(info.returnType)
+      // );
     } else { // it's a nested query so use the parentType
       serviceType = serviceTypeLookup[info.parentType.name];
-      console.log(
-        'parent type: ' + JSON.stringify(info.parentType) +
-         ' return type: ' + JSON.stringify(info.returnType)
-      );
+      // console.log(
+      //   'parent type: ' + JSON.stringify(info.parentType) +
+      //    ' return type: ' + JSON.stringify(info.returnType)
+      // );
     }
-
     const serviceId = parent ? parent.id : args.id;
-
     const currentUser = await context.dataSources.eresAPI.personFindByIdentity(
       context.user.preferred_username
     );
-
-    console.log(
-      'personId: ' + currentUser.id +
-      ' serviceId: ' + serviceId +
-      ' serviceType: ' + serviceType);
+    // console.log(
+    //   'personId: ' + currentUser.id +
+    //   ' serviceId: ' + serviceId +
+    //   ' serviceType: ' + serviceType);
 
     // get service projects:
     // user can view the service if they are a member of any of the
@@ -99,9 +83,6 @@ const isServiceMember = rule({ cache: 'strict' })(
         const personId = parseInt(member.person.href.slice(8), 10);
         if (personId === currentUser.id) {
           // found a match so current user is allowed to view the service
-          console.log('Match found! User may view the requested service.');
-          const t1 = performance.now();
-          console.log(`Call to isServiceMember took ${t1 - t0} milliseconds.`);
           return true;
         }
       }
@@ -139,19 +120,12 @@ const isServiceMember = rule({ cache: 'strict' })(
           for (const member of members[0].users) {
             if (member.username === context.user.preferred_username) {
               // found a match so current user is allowed to view the service
-              console.log('Match found! User may view the requested service.');
-              const t1 = performance.now();
-              console.log(
-                `Call to isServiceMember took ${t1 - t0} milliseconds.`);
               return true;
             }
           }
         }
       }
     }
-    console.log('No match found! user can not view the requested service.');
-    const t1 = performance.now();
-    console.log(`Call to isServiceMember took ${t1 - t0} milliseconds.`);
     return false;
   }
 );

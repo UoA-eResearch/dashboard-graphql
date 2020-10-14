@@ -1,5 +1,4 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
-import { performance } from 'perf_hooks';
 
 export class EResearchProjectAPI extends RESTDataSource {
   constructor() {
@@ -25,10 +24,7 @@ export class EResearchProjectAPI extends RESTDataSource {
   }
 
   async getProjects() {
-    const t0 = performance.now();
     const result = this.get('project');
-    const t1 = performance.now();
-    console.log(`Call to getUserInfo took ${t1 - t0} milliseconds.`);
     return result;
   }
 

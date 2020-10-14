@@ -15,21 +15,17 @@
 
 import { AuthenticationError } from 'apollo-server-lambda';
 import fetch from 'node-fetch';
-import { performance } from 'perf_hooks';
 
 const utils = require('@uoa/utilities');
 
 export async function getUserInfo(event) {
   // Get user from token
-  const t0 = performance.now();
   try {
     let data = await utils.getUserInfo(
       event,
       process.env.COGNITO_DOMAIN + '.auth.' +
       process.env.REGION + '.amazoncognito.com'
     );
-    const t1 = performance.now();
-    console.log(`Call to getUserInfo took ${t1 - t0} milliseconds.`);
 
     if (data.error) {
       throw new AuthenticationError(data.error);
@@ -46,7 +42,6 @@ export async function getUserInfo(event) {
 
 
 export async function getUserGroups(upi) {
-  const t0 = performance.now();
   try {
     if (upi === undefined) {
       throw new Error('No upi given.');
@@ -70,8 +65,6 @@ export async function getUserGroups(upi) {
       const cerGroups = groups.memberships.filter((membership) => {
         return membership.memberid.includes('eresearch.auckland.ac.nz');
       });
-      const t1 = performance.now();
-      console.log(`Call to getUserGroups took ${t1 - t0} milliseconds.`);
       return cerGroups;
     } else {
       const err = await response.json();
