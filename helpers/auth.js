@@ -31,7 +31,15 @@ export async function getUserInfo(event) {
     if (data.error) {
       throw new AuthenticationError(data.error);
     } else {
-      const groups = await getUserGroups(data.preferred_username);
+      let force = false;
+      if (event.queryStringParameters &&
+        event.queryStringParameters['forcegrouper'] &&
+        event.queryStringParameters['forcegrouper'] === 'true'
+      ) {
+        console.info('Forcing data retrieval from Grouper');
+        force = true;
+      }
+      const groups = await getUserGroups(data.preferred_username, force);
       data['groups'] = groups;
       data['roles'] = await getUserRoles(groups);
       return data;
@@ -42,7 +50,7 @@ export async function getUserInfo(event) {
 };
 
 
-export async function getUserGroups(upi) {
+export async function getUserGroups(upi, force) {
   try {
     if (upi === undefined) {
       throw new Error('No upi given.');
@@ -59,9 +67,12 @@ export async function getUserGroups(upi) {
     // }
 
     let cerGroups;
+    let dynamoDBResult;
 
-    // check dynamoDB
-    const dynamoDBResult = await getFromDynamoDB(upi);
+    if (!force) {
+      // check dynamoDB cache for user groups
+      dynamoDBResult = await getFromDynamoDB(upi);
+    }
 
     if (
       dynamoDBResult &&
