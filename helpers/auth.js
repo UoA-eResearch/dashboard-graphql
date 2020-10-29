@@ -15,7 +15,7 @@
 
 import { AuthenticationError } from 'apollo-server-lambda';
 import fetch from 'node-fetch';
-import { getFromCache, saveToCache } from './cache';
+import { getFromDynamoDB, saveToDynamoDB } from './dynamoDb';
 
 const utils = require('@uoa/utilities');
 
@@ -48,17 +48,28 @@ export async function getUserGroups(upi) {
       throw new Error('No upi given.');
     }
 
-    // TO DO: need a way to force grouper api call if necessary
-    // e.g. when we know that groups have changed.
+    // TO DO: force grouper api call if necessary
+    // e.g. when we know that groups have changed. could use query params
+    // that we can get from event e.g.:
+    // let force = false;
+    // if (event.queryStringParameters &&
+    //     event.queryStringParameters['force']) {
+    //   console.info(`Forcing data retrieval from grouper`);
+    //   force = true;
+    // }
 
     let cerGroups;
 
-    // check cache
-    const cacheResult = await getFromCache(upi);
+    // check dynamoDB
+    const dynamoDBResult = await getFromDynamoDB(upi);
 
-    if (cacheResult && cacheResult.cerGroups) {
-      console.log('users groups were found in the cache!');
-      cerGroups = cacheResult.cerGroups;
+    if (
+      dynamoDBResult &&
+      dynamoDBResult.Item &&
+      dynamoDBResult.Item.data?.cerGroups !== undefined
+    ) {
+      console.log('users groups were found in dynamoDB!');
+      cerGroups = dynamoDBResult.Item.data.cerGroups;
 
       return cerGroups;
 
@@ -85,8 +96,8 @@ export async function getUserGroups(upi) {
           return membership.memberid.includes('eresearch.auckland.ac.nz');
         });
 
-        // save to the cache
-        await saveToCache(upi, {cerGroups: cerGroups});
+        // save to dynamoDB
+        await saveToDynamoDB(upi, {cerGroups: cerGroups});
 
         return cerGroups;
 

@@ -31,6 +31,8 @@
             "TBD"
         ],
         "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "TBD",
-        "PLAYGROUND_ENDPOINT": ""
+        "PLAYGROUND_ENDPOINT": "",
+        "DYNAMODB_TABLE_NAME": "cer-dashboard",
+        "CACHE_NUMBER_OF_HOURS": "1"
     }
 }

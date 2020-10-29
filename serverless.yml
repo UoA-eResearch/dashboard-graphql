@@ -9,6 +9,7 @@ custom:
   ProjectCode: N/A
   CostCentre: N/A
   WikiLink: N/A
+  Faculty: Science
   serverless-offline:
     stage: ${self:provider.stage}
     httpPort: 4000
@@ -32,6 +33,7 @@ provider:
     ProjectCode: ${self:custom.ProjectCode}
     CostCentre: ${self:custom.CostCentre}
     WikiLink: ${self:custom.WikiLink}
+    Faculty: ${self:custom.Faculty}
   stackTags:
     Department: ${self:custom.Department}
     Environment: ${self:custom.Environment}
@@ -40,6 +42,7 @@ provider:
     ProjectCode: ${self:custom.ProjectCode}
     CostCentre: ${self:custom.CostCentre}
     WikiLink: ${self:custom.WikiLink}
+    Faculty: ${self:custom.Faculty}
   deploymentBucket:
     name: ${self:custom.bucketBaseName}-${self:provider.stage}
   environment:
@@ -54,6 +57,8 @@ provider:
     REGION: ${self:provider.region}
     CORS_ACCESS_CONTROL_ALLOW_ORIGINS: "${file(env/${self:provider.stage}.json):app.CORS_ACCESS_CONTROL_ALLOW_ORIGINS}"
     PLAYGROUND_ENDPOINT: ${file(env/${self:provider.stage}.json):app.PLAYGROUND_ENDPOINT}
+    DYNAMODB_TABLE_NAME: ${file(env/${self:provider.stage}.json):app.DYNAMODB_TABLE_NAME}
+    CACHE_NUMBER_OF_HOURS: ${file(env/${self:provider.stage}.json):app.CACHE_NUMBER_OF_HOURS}
 
 plugins:
   - serverless-bundle # Must be first, see https://github.com/AnomalyInnovations/serverless-bundle
@@ -144,6 +149,20 @@ resources:
                           - Ref: "AWS::Region"
                           - Ref: "AWS::AccountId"
                           - "key/${file(env/${self:provider.stage}.json):infra.kmsUoaCentralKeyId}"
+                - Effect: Allow
+                  Action:
+                    - "dynamodb:GetItem"
+                    - "dynamodb:UpdateItem"
+                    - "dynamodb:PutItem"
+                    - "dynamodb:Scan"
+                    - "dynamodb:Query"
+                  Resource:
+                    - "Fn::Join":
+                        - ":"
+                        - - "arn:aws:dynamodb"
+                          - Ref: "AWS::Region"
+                          - Ref: "AWS::AccountId"
+                          - "table/${file(env/${self:provider.stage}.json):app.DYNAMODB_TABLE_NAME}"
     MyApiGatewayAuthorizer:
       Type: AWS::ApiGateway::Authorizer
       Properties:
@@ -209,3 +228,19 @@ resources:
         Tier: Standard
         Type: String
         Value: ${file(env/${self:provider.stage}.json):app.authorisedGroupmembershipList}
+    MyDynamoDB:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: "${file(env/${self:provider.stage}.json):app.DYNAMODB_TABLE_NAME}"
+        AttributeDefinitions:
+          - AttributeName: upi
+            AttributeType: S
+        KeySchema:
+          - AttributeName: upi
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true

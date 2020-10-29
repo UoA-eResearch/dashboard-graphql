@@ -34,6 +34,8 @@
             "https://my-domain.auckland.ac.nz/angular-test"
         ],
         "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*",
-        "PLAYGROUND_ENDPOINT": "http://localhost:4000/dev/graphql"
+        "PLAYGROUND_ENDPOINT": "http://localhost:4000/dev/graphql",
+        "DYNAMODB_TABLE_NAME": "cer-dashboard",
+        "CACHE_NUMBER_OF_HOURS": "1"
     }
 }
