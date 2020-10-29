@@ -4,7 +4,9 @@
 
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 
-const dynamoDbClient = new DynamoDB.DocumentClient();
+const dynamoDbClient = new DynamoDB.DocumentClient(
+  {region: process.env.REGION}
+);
 
 export async function getFromDynamoDB(upi) {
   const tableName = process.env.DYNAMODB_TABLE_NAME;
