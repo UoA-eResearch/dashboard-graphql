@@ -15,6 +15,7 @@
 
 import { AuthenticationError } from 'apollo-server-lambda';
 import fetch from 'node-fetch';
+import { getFromCache, saveToCache } from './cache';
 
 const utils = require('@uoa/utilities');
 
@@ -46,33 +47,56 @@ export async function getUserGroups(upi) {
     if (upi === undefined) {
       throw new Error('No upi given.');
     }
-    const baseURL = process.env.REGROUP_V2_API_BASE_URL;
-    const apiKey = process.env.REGROUP_V2_API_KEY;
-    const headers = {
-      'Content-Type': 'application/json',
-      apikey: apiKey,
-    };
-    const response = await fetch(
-      `${baseURL}/user/${upi}/membership`, {headers: headers}
-    );
 
-    if (response.ok) {
-      const groups = await response.json();
-      if (groups.total === 0) {
-        throw new Error('User has no groups. Check if UPI is valid.');
-      }
-      // filter groups to only CeR-related groups (eresearch.auckland.ac.nz)
-      const cerGroups = groups.memberships.filter((membership) => {
-        return membership.memberid.includes('eresearch.auckland.ac.nz');
-      });
+    // TO DO: need a way to force grouper api call if necessary
+    // e.g. when we know that groups have changed.
+
+    let cerGroups;
+
+    // check cache
+    const cacheResult = await getFromCache(upi);
+
+    if (cacheResult && cacheResult.cerGroups) {
+      console.log('users groups were found in the cache!');
+      cerGroups = cacheResult.cerGroups;
+
       return cerGroups;
-    } else {
-      const err = await response.json();
-      throw new Error(
-        `${response.status} Grouper Error message: ${err.message}`
-      );
-    }
 
+    } else {
+      // we need to get from grouper
+      console.log('getting user groups from grouper!');
+      const baseURL = process.env.REGROUP_V2_API_BASE_URL;
+      const apiKey = process.env.REGROUP_V2_API_KEY;
+      const headers = {
+        'Content-Type': 'application/json',
+        apikey: apiKey,
+      };
+      const response = await fetch(
+        `${baseURL}/user/${upi}/membership`, {headers: headers}
+      );
+
+      if (response.ok) {
+        const groups = await response.json();
+        if (groups.total === 0) {
+          throw new Error('User has no groups. Check if UPI is valid.');
+        }
+        // filter groups to only CeR-related groups (eresearch.auckland.ac.nz)
+        cerGroups = groups.memberships.filter((membership) => {
+          return membership.memberid.includes('eresearch.auckland.ac.nz');
+        });
+
+        // save to the cache
+        await saveToCache(upi, {cerGroups: cerGroups});
+
+        return cerGroups;
+
+      } else {
+        const err = await response.json();
+        throw new Error(
+          `${response.status} Grouper Error message: ${err.message}`
+        );
+      }
+    }
   } catch (e) {
     throw new AuthenticationError(`Error getting user groups: ${e}`);
   }
