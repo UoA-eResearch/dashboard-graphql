@@ -1,3 +1,7 @@
+// DynamoDB acts as a cache to store, for example, the users'
+// cer Groups, to save calls to the grouper API
+// we use the users' upi as the storage partition key
+
 const DynamoDB = require('aws-sdk/clients/dynamodb');
 
 const dynamoDbClient = new DynamoDB.DocumentClient();

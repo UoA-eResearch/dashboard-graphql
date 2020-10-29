@@ -15,7 +15,7 @@
 
 import { AuthenticationError } from 'apollo-server-lambda';
 import fetch from 'node-fetch';
-import { getFromDynamoDB, saveToDynamoDB } from './dynamoDb';
+import { getFromDynamoDB, saveToDynamoDB } from './dynamoDB.js';
 
 const utils = require('@uoa/utilities');
 
