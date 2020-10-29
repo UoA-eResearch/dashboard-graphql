@@ -15,7 +15,8 @@ export async function getFromDynamoDB(upi) {
       upi: upi,
     },
   };
-  return dynamoDbClient.get(params);
+
+  return dynamoDbClient.get(params).promise();
 };
 
 export async function saveToDynamoDB(upi, data) {
@@ -30,16 +31,18 @@ export async function saveToDynamoDB(upi, data) {
   let expTime = new Date(now.setHours(
     now.getHours() + parseInt(ttlHours, 10))
   );
+  let updated_at = new Date();
 
   const item = {
     upi: upi,
-    updated_at: new Date(),
-    ttl: expTime.getTime(),
+    updated_at: updated_at.toISOString(),
+    ttl: Math.round(expTime.getTime() / 1000),
     data: data,
   };
   const params = {
     TableName: tableName,
     Item: item,
   };
-  return dynamoDbClient.put(params);
+
+  return dynamoDbClient.put(params).promise();
 };
