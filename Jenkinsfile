@@ -67,9 +67,15 @@ pipeline {
         
         stage('Run tests') {
             steps {
-                echo "Testing dashboard-graphql project"
-                sh "env AWS_PROFILE=${awsProfile} npm run test:ci"
-            }
+                script {
+                    if (env.BRANCH_NAME == 'sandbox') {
+                        echo "Testing dashboard-graphql project"
+                        sh "env AWS_PROFILE=${awsProfile} npm run test:ci"
+                    } else {
+                        echo 'Skipping tests for nonprod deployment. To do: enable correct env vars for tests in nonprod.'
+                    }
+                }
+            }   
         }
   
         stage('Deploy') {
