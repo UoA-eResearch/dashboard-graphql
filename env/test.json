@@ -19,6 +19,7 @@
             "http://localhost:4200",
             "https://eresearch-dashboard.connect.test.amazon.auckland.ac.nz"
         ],
+        "cognitoResourceServerName": "eresearch-dashboard",
         "kmsUoaCentralKeyId": "891f7417-3a6e-4152-b6d5-c37433acae54"
     },
     "app": {
