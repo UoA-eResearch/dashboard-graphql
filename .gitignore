@@ -12,3 +12,4 @@ jspm_packages
 coverage
 tests/load-testing/outputs/*.json
 tests/load-testing/outputs/*.html
+tests/__snapshots__

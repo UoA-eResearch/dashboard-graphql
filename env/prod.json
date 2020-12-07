@@ -1,10 +1,38 @@
 {
-    "NODE_ENV": "production",
-    "PROJECT_DB_BASE_URL": "https://api.auckland.ac.nz/service/eresearch-project/v1",
-    "PROJECT_DB_API_KEY": "TBD",
-    "OAUTH_SCOPES": [
-        "TBD"
-    ],
-    "COGNITO_DOMAIN": "TBD",
-    "COGNITO_REGION": "TBD"
+    "infra": {
+        "awsApiGatewayCustomDomainName": "apigw.prod.amazon.auckland.ac.nz",
+        "cognitoUserPoolId": "ap-southeast-2_8SJ2jkMu6",
+        "cognitoIdentityProvider": [
+            "UoAProdIDP"
+        ],
+        "cognitoAppClientName": "TBD",
+        "cognitoAppClientScopes": [
+            "openid",
+            "profile",
+            "TBD"
+        ],
+        "cognitoAppClientCallbackUrls": [
+            "TBD"
+        ],
+        "cognitoAppClientLogoutUrls": [
+            "TBD"
+        ],
+        "kmsUoaCentralKeyId": "180f8f50-c1f3-4b9a-b793-0fca514ab708"
+    },
+    "app": {
+        "NODE_ENV": "production",
+        "COGNITO_DOMAIN": "TBD",
+        "PROJECT_DB_BASE_URL": "https://api.auckland.ac.nz/service/eresearch-project/v1",
+        "PROJECT_DB_API_KEY": "TBD",
+        "REGROUP_V2_API_BASE_URL": "https://api.auckland.ac.nz/service/regroup/v2",
+        "REGROUP_V2_API_KEY": "TBD",
+        "authorisedGroupmembershipList": "TBD",
+        "awsApiGatewayOauthScopes": [
+            "TBD"
+        ],
+        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "TBD",
+        "PLAYGROUND_ENDPOINT": "",
+        "DYNAMODB_TABLE_NAME": "cer-dashboard",
+        "CACHE_NUMBER_OF_HOURS": "1"
+    }
 }

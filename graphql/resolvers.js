@@ -4,8 +4,14 @@ export const resolvers = {
       return dataSources.eresAPI.personFindByIdentity(
         args.username);
     },
+    people: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.getPeople();
+    },
     person: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.getPerson(args.id);
+    },
+    projects: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.getProjects();
     },
     project: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.getProject(args.id);
@@ -24,6 +30,9 @@ export const resolvers = {
     },
     visualisation: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.getVis(args.id);
+    },
+    groupmembers: (parent, args, { dataSources }) => {
+      return dataSources.grouperAPI.getGroupMembers(args.groupnames);
     },
   },
   Person: {
@@ -108,10 +117,16 @@ export const resolvers = {
     projects: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.get(`vm/${parent.id}/project`);
     },
+    groups: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.get(`vm/${parent.id}/group`);
+    },
   },
   ResearchStorageService: {
     projects: (parent, args, { dataSources }) => {
       return dataSources.eresAPI.get(`researchdrive/${parent.id}/project`);
+    },
+    groups: (parent, args, { dataSources }) => {
+      return dataSources.eresAPI.get(`researchdrive/${parent.id}/group`);
     },
   },
   NectarService: {

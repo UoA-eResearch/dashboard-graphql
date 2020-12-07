@@ -10,11 +10,19 @@ const typeDefs = gql`
     """
     user(username: String!): Person
     """
+    Fetches all people. ADMIN ONLY - see permissions.js.
+    """
+    people: [Person]
+    """
     Fetches a person given their ID.
     #### Arguments:
     id: ID (from the eRes Project DB) of the person.
     """
     person(id: Int!): Person
+    """
+    Fetches all projects. ADMIN ONLY - see permissions.js.
+    """
+    projects: [Project]
     """
     Fetches a project given its ID.
     #### Arguments:
@@ -51,6 +59,12 @@ const typeDefs = gql`
     id: ID (from the eRes Project DB) of the Nectar allocation.
     """
     nectar(id: Int!): NectarService
+    """
+    Fetches members of a group or groups, given an array of group names.
+    #### Arguments:
+    groupnames: names of groups. E.g.: rvmf00088_vmuser
+    """
+    groupmembers(groupnames: [String]!): [GroupMembers]
   }
 
   "Details about a person's identity and projects"
@@ -89,8 +103,7 @@ const typeDefs = gql`
   type Project {
     id: Int!
     creation_date: String
-    # keep description out until more fine-grained auth is implemented:
-    # description: String
+    description: String
     division: String
     end_date: String
     "A list of external references related to the project"
@@ -386,6 +399,8 @@ const typeDefs = gql`
     uuid: String
     "A list of projects related to this research vm service"
     projects: [ServiceProject]
+    "The access groups of the research vm service"
+    groups: ResearchVMServiceGroup
   }
 
   "Details of a Research Storage Service"
@@ -402,6 +417,8 @@ const typeDefs = gql`
     used_gb: Float
     "A list of projects related to this research storage service"
     projects: [ServiceProject]
+    "The access groups of the research storage service"
+    groups: ResearchDriveServiceGroup
   }
 
   "Details of a Nectar Service"
@@ -440,6 +457,35 @@ const typeDefs = gql`
     last_day: String
     "Details about the project"
     project: Project
+  }
+
+  "Details about the access groups associated with a research vm service"
+  type ResearchVMServiceGroup {
+    id: Int!
+    admin_group: String
+    rw_group: String
+    user_group: String
+  }
+
+  "Details about the access groups associated with a research drive service"
+  type ResearchDriveServiceGroup {
+    id: Int!
+    adm_group: String
+    ro_group: String
+    rw_group: String
+    t_group: String
+  }
+
+  type GroupMembers {
+    total: Int
+    groupname: String
+    users: [GroupMember]
+  }
+
+  type GroupMember {
+    id: String
+    username: String
+    name: String
   }
 `;
 

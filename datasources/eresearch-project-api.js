@@ -15,8 +15,17 @@ export class EResearchProjectAPI extends RESTDataSource {
     return this.get(`person/findByIdentity/${username}`);
   }
 
+  async getPeople() {
+    return this.get('person');
+  }
+
   async getPerson(id) {
     return this.get(`person/${id}`);
+  }
+
+  async getProjects() {
+    const result = this.get('project');
+    return result;
   }
 
   async getProject(id) {
