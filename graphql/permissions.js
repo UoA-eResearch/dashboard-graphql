@@ -10,6 +10,7 @@ const serviceTypeLookup = {
 
 const isAdmin = rule({ cache: 'contextual' })(
   async(parent, args, context, info) => {
+    // console.log('Checking isAdmin...');
     if (
       !context.user.hasOwnProperty('roles') ||
       !context.user.roles.includes('ADMIN')
@@ -22,6 +23,7 @@ const isAdmin = rule({ cache: 'contextual' })(
 
 const isProjectMember = rule({ cache: 'strict' })(
   async(parent, args, { user, dataSources }, info) => {
+    // console.log('Checking isProjectMember...');
     const projectId = parent ? parent.id : args.id;
     const currentUser = await dataSources.eresAPI.personFindByIdentity(
       user.preferred_username
@@ -42,6 +44,7 @@ const isProjectMember = rule({ cache: 'strict' })(
 
 const isServiceMember = rule({ cache: 'strict' })(
   async(parent, args, context, info) => {
+    // console.log('Checking isServiceMember...');
     let serviceType;
     if (info.parentType.name === 'Query') { // it's a top-level query
       serviceType = serviceTypeLookup[info.returnType.name];
