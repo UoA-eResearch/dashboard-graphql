@@ -180,7 +180,6 @@ resources:
                 - Ref: "AWS::AccountId"
                 - "userpool/${file(env/${self:provider.stage}.json):infra.cognitoUserPoolId}"
     MyResourceServer:
-      # TODO: modify this once a new app client is created (using test one atm) and change out the cognitoResourceServerName for cognitoAppClientName
       Type: AWS::Cognito::UserPoolResourceServer
       Properties:
         Identifier: https://${file(env/${self:provider.stage}.json):infra.cognitoResourceServerName}.auckland.ac.nz
