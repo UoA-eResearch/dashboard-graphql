@@ -4,11 +4,11 @@ custom:
   bucketBaseName: serverless-shared-bucket
   Department: "Centre for eResearch"
   Environment: "${self:provider.stage}"
-  BusinessService: "Faculty of Science"
-  Application: "CeR Research Dashboard"
-  ProjectCode: N/A
-  CostCentre: N/A
-  WikiLink: N/A
+  BusinessService: "eResearch Services"
+  Application: "eResearch Dashboard"
+  ProjectCode: TBC
+  CostCentre: TBC
+  WikiLink: https://wiki.auckland.ac.nz/display/APPLCTN/eResearch+Dashboard
   Faculty: Science
   serverless-offline:
     stage: ${self:provider.stage}
