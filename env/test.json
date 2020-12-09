@@ -5,7 +5,7 @@
         "cognitoIdentityProvider": [
             "UoATestIDP"
         ],
-        "cognitoAppClientName": "eresearch-dashboard-tst",
+        "cognitoAppClientName": "eresearch-dashboard-test",
         "cognitoAppClientScopes": [
             "openid",
             "profile",
@@ -26,10 +26,10 @@
         "NODE_ENV": "test",
         "COGNITO_DOMAIN": "uoapool-nonprod",
         "PROJECT_DB_BASE_URL": "https://api.test.auckland.ac.nz/service/eresearch-project/v1",
-        "PROJECT_DB_API_KEY": "${ssm:/tst/cer-dashboard/projectdb_apikey~true}",
+        "PROJECT_DB_API_KEY": "${ssm:/test/cer-dashboard/projectdb_apikey~true}",
         "REGROUP_V2_API_BASE_URL": "https://api.test.auckland.ac.nz/service/regroup/v2",
-        "REGROUP_V2_API_KEY": "${ssm:/tst/cer-dashboard/regroup_v2_apikey~true}",
-        "authorisedGroupmembershipList": "Employee.psrwi|Postgraduate.psrwi",
+        "REGROUP_V2_API_KEY": "${ssm:/test/cer-dashboard/regroup_v2_apikey~true}",
+        "authorisedGroupmembershipList": "Employee.psrwi|Postgraduate.psrwi|staffIntranetUser.ec",
         "awsApiGatewayOauthScopes": [
             "https://eresearch-dashboard.auckland.ac.nz/dashboard"
         ],
