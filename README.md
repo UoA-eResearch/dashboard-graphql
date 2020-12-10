@@ -110,4 +110,4 @@ Slack notifications can be viewed in the Research-Hub channel in uoa.slack.com.
 Notification of a pipeline success or failure can also be seen in GitHub, as either a tick or a cross beside the commit that triggered the build.
 
 ## Branch Protection
-Currently, only the prod branch has branch protection applied. Branch protection is configured so that changes can only be merged into the branch once a pull request is submitted and approved. To view and modify branch protection rules in GitHub, go here: https://github.com/UoA-eResearch/dashboard-graphql/settings/branches (requires admin access).
+Currently, only the prod branch has branch protection applied. Branch protection is configured so that changes can only be merged into the branch once a pull request is submitted and approved. To view and modify branch protection rules in GitHub, go here: https://github.com/UoA-eResearch/dashboard-graphql/settings/branches (requires admin access). 
