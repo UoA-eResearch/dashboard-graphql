@@ -2,24 +2,6 @@
     "infra": {
         "awsApiGatewayCustomDomainName": "apigw.test.amazon.auckland.ac.nz",
         "cognitoUserPoolId": "ap-southeast-2_gtuqqgIIq",
-        "cognitoIdentityProvider": [
-            "UoATestIDP"
-        ],
-        "cognitoAppClientName": "eresearch-dashboard-test",
-        "cognitoAppClientScopes": [
-            "openid",
-            "profile",
-            "https://eresearch-dashboard.auckland.ac.nz/dashboard"
-        ],
-        "cognitoAppClientCallbackUrls": [
-            "http://localhost:4200",
-            "https://eresearch-dashboard.connect.test.amazon.auckland.ac.nz"
-        ],
-        "cognitoAppClientLogoutUrls": [
-            "http://localhost:4200",
-            "https://eresearch-dashboard.connect.test.amazon.auckland.ac.nz"
-        ],
-        "cognitoResourceServerName": "eresearch-dashboard",
         "kmsUoaCentralKeyId": "891f7417-3a6e-4152-b6d5-c37433acae54"
     },
     "app": {
@@ -29,7 +11,6 @@
         "PROJECT_DB_API_KEY": "${ssm:/test/cer-dashboard/projectdb_apikey~true}",
         "REGROUP_V2_API_BASE_URL": "https://api.test.auckland.ac.nz/service/regroup/v2",
         "REGROUP_V2_API_KEY": "${ssm:/test/cer-dashboard/regroup_v2_apikey~true}",
-        "authorisedGroupmembershipList": "Employee.psrwi|Postgraduate.psrwi|staffIntranetUser.ec",
         "awsApiGatewayOauthScopes": [
             "https://eresearch-dashboard.auckland.ac.nz/dashboard"
         ],

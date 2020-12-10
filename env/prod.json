@@ -2,22 +2,6 @@
     "infra": {
         "awsApiGatewayCustomDomainName": "apigw.prod.amazon.auckland.ac.nz",
         "cognitoUserPoolId": "ap-southeast-2_8SJ2jkMu6",
-        "cognitoIdentityProvider": [
-            "UoAProdIDP"
-        ],
-        "cognitoAppClientName": "TBD",
-        "cognitoAppClientScopes": [
-            "openid",
-            "profile",
-            "TBD"
-        ],
-        "cognitoAppClientCallbackUrls": [
-            "TBD"
-        ],
-        "cognitoAppClientLogoutUrls": [
-            "TBD"
-        ],
-        "cognitoResourceServerName": "TBD",
         "kmsUoaCentralKeyId": "180f8f50-c1f3-4b9a-b793-0fca514ab708"
     },
     "app": {
@@ -27,7 +11,6 @@
         "PROJECT_DB_API_KEY": "TBD",
         "REGROUP_V2_API_BASE_URL": "https://api.auckland.ac.nz/service/regroup/v2",
         "REGROUP_V2_API_KEY": "TBD",
-        "authorisedGroupmembershipList": "TBD",
         "awsApiGatewayOauthScopes": [
             "TBD"
         ],
