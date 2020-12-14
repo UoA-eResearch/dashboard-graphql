@@ -59,6 +59,8 @@ provider:
     PLAYGROUND_ENDPOINT: ${file(env/${self:provider.stage}.json):app.PLAYGROUND_ENDPOINT}
     DYNAMODB_TABLE_NAME: ${file(env/${self:provider.stage}.json):app.DYNAMODB_TABLE_NAME}
     CACHE_NUMBER_OF_HOURS: ${file(env/${self:provider.stage}.json):app.CACHE_NUMBER_OF_HOURS}
+  apiGateway:
+    shouldStartNameWithService: true
 
 plugins:
   - serverless-bundle # Must be first, see https://github.com/AnomalyInnovations/serverless-bundle
