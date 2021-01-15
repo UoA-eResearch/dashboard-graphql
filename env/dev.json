@@ -12,7 +12,7 @@
         "REGROUP_V2_API_BASE_URL": "https://api.test.auckland.ac.nz/service/regroup/v2",
         "REGROUP_V2_API_KEY": "${ssm:/dev/cer-dashboard/regroup_v2_apikey_test~true}",
         "awsApiGatewayOauthScopes": [
-            "https://my-domain.auckland.ac.nz/angular-test"
+            "https://eresearch-dashboard.auckland.ac.nz/dashboard"
         ],
         "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*",
         "PLAYGROUND_ENDPOINT": "http://localhost:4000/dev/graphql",
