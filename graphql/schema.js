@@ -368,6 +368,7 @@ const typeDefs = gql`
     viewer_group: String
     "A list of projects related to this dropbox service"
     projects: [ServiceProject]
+    groups: DropboxServiceGroup
   }
 
   "Details of a Visualisation Service"
@@ -474,6 +475,12 @@ const typeDefs = gql`
     ro_group: String
     rw_group: String
     t_group: String
+  }
+
+  type DropboxServiceGroup {
+    id: Int!
+    editor_group: String
+    viewer_group: String
   }
 
   type GroupMembers {

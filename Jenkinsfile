@@ -51,7 +51,7 @@ pipeline {
                         usernamePassword(credentialsId: "${awsCredentialsId}", passwordVariable: 'awsPassword', usernameVariable: 'awsUsername'),
                         string(credentialsId: "${awsTokenId}", variable: 'awsToken')
                     ]) {
-                        sh "python3 /home/jenkins/aws_saml_login.py --idp iam.auckland.ac.nz --user $awsUsername --password $awsPassword --token $awsToken --profile ${awsProfile} --role devops"
+                        sh 'python3 /home/jenkins/aws_saml_login.py --idp iam.auckland.ac.nz --user $awsUsername --password $awsPassword --token $awsToken --role devops --profile ' + awsProfile
                     }
                 }
             }
@@ -89,6 +89,8 @@ pipeline {
                     )
                     echo "Deployment stage = ${stage}"
                     
+                    sh "sls --version"
+
                     sh "sls deploy --stage ${stage} --aws-profile ${awsProfile}"
 
                     echo "Deploy to ${env.BRANCH_NAME} complete"

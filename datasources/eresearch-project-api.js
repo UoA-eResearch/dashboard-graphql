@@ -79,7 +79,19 @@ export class EResearchProjectAPI extends RESTDataSource {
   }
 
   async getDropbox(id) {
-    return this.get(`dropbox/${id}`);
+    const data = await this.get(`dropbox/${id}`);
+
+    // merge dropbox groups into one object to be consistent with
+    // other service types (storage drive and vm)
+    data['groups'] = {};
+    if (data.hasOwnProperty('editor_group')) {
+      data['groups']['editor_group'] = data['editor_group'];
+    }
+    if (data.hasOwnProperty('viewer_group')) {
+      data['groups']['viewer_group'] = data['viewer_group'];
+    }
+
+    return data;
   }
 
   async getVis(id) {
