@@ -6,15 +6,15 @@
     },
     "app": {
         "NODE_ENV": "production",
-        "COGNITO_DOMAIN": "TBD",
+        "COGNITO_DOMAIN": "uoapool",
         "PROJECT_DB_BASE_URL": "https://api.auckland.ac.nz/service/eresearch-project/v1",
         "PROJECT_DB_API_KEY": "TBD",
         "REGROUP_V2_API_BASE_URL": "https://api.auckland.ac.nz/service/regroup/v2",
         "REGROUP_V2_API_KEY": "TBD",
         "awsApiGatewayOauthScopes": [
-            "TBD"
+            "https://eresearch-dashboard.auckland.ac.nz/dashboard"
         ],
-        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "TBD",
+        "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*",
         "PLAYGROUND_ENDPOINT": "",
         "DYNAMODB_TABLE_NAME": "cer-dashboard",
         "CACHE_NUMBER_OF_HOURS": "1"
