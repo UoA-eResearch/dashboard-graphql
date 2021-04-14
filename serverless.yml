@@ -102,7 +102,7 @@ resources:
       Type: "AWS::IAM::Role"
       Properties:
         Path: /
-        RoleName: ${self:service}-lambda-role
+        RoleName: ${self:service}-lambda-role-${self:provider.stage}
         AssumeRolePolicyDocument:
           Version: "2012-10-17"
           Statement:
