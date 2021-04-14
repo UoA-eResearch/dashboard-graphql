@@ -29,16 +29,22 @@ pipeline {
                         awsTokenId = 'aws-sandbox-token'
                         awsProfile = 'uoa-sandbox'
 
-                    } else if (env.BRANCH_NAME == 'nonprod') {
-                        echo 'Setting variables for nonprod deployment'
+                    } else if (env.BRANCH_NAME == 'dev') {
+                        echo 'Setting variables for dev deployment'
+                        awsCredentialsId = 'aws-its-nonprod-access'
+                        awsTokenId = 'aws-its-nonprod-token'
+                        awsProfile = 'uoa-its-nonprod'
+
+                    } else if (env.BRANCH_NAME == 'test') {
+                        echo 'Setting variables for test deployment'
                         awsCredentialsId = 'aws-its-nonprod-access'
                         awsTokenId = 'aws-its-nonprod-token'
                         awsProfile = 'uoa-its-nonprod'
 
                     } else if (env.BRANCH_NAME == 'prod') {
                         echo 'Setting variables for prod deployment'
-                        awsCredentialsId = 'uoa-its-prod-access'
-                        awsTokenId = 'uoa-its-prod-token'
+                        awsCredentialsId = 'aws-its-prod'
+                        awsTokenId = 'Access token for ITS Prod Account'
                         awsProfile = 'uoa-its-prod'
 
                     } else {
@@ -81,18 +87,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo "Deploying dashboard-graphql to Lambda on ${env.BRANCH_NAME}"
-                script {            
-                    def stage = (
-                        env.BRANCH_NAME == 'prod' ? 'prod' : 
-                        env.BRANCH_NAME == 'nonprod' ? 'test' : 
-                        'dev'
-                    )
-                    echo "Deployment stage = ${stage}"
-                    
+                script {                    
                     sh "sls --version"
-
-                    sh "sls deploy --stage ${stage} --aws-profile ${awsProfile}"
-
+                    sh "sls deploy --stage ${env.BRANCH_NAME} --aws-profile ${awsProfile}"
                     echo "Deploy to ${env.BRANCH_NAME} complete"
                 }
             }

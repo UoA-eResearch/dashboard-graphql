@@ -15,7 +15,7 @@ custom:
     httpPort: 4000
   customDomain:
     domainName: ${file(env/${self:provider.stage}.json):infra.awsApiGatewayCustomDomainName}
-    basePath: ${self:service}
+    basePath: ${self:service}-${self:provider.stage}
     stage: ${self:provider.stage}
 
 provider:
@@ -44,7 +44,7 @@ provider:
     WikiLink: ${self:custom.WikiLink}
     Faculty: ${self:custom.Faculty}
   deploymentBucket:
-    name: ${self:custom.bucketBaseName}-${self:provider.stage}
+    name: ${self:custom.bucketBaseName}-${file(env/${self:provider.stage}.json):infra.deploymentBucketStage}  # Required because dev and test go into same bucket in nonpro
   environment:
     # Environment variables available to all functions in this service
     ENV: ${self:provider.stage}

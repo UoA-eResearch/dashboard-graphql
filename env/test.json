@@ -1,6 +1,7 @@
 {
     "infra": {
         "awsApiGatewayCustomDomainName": "apigw.test.amazon.auckland.ac.nz",
+        "deploymentBucketStage": "test",
         "cognitoUserPoolId": "ap-southeast-2_gtuqqgIIq",
         "kmsUoaCentralKeyId": "891f7417-3a6e-4152-b6d5-c37433acae54"
     },

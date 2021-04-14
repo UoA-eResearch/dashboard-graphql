@@ -1,22 +1,23 @@
 {
     "infra": {
-        "awsApiGatewayCustomDomainName": "apigw.sandbox.amazon.auckland.ac.nz",
-        "cognitoUserPoolId": "ap-southeast-2_pgErjyL4O",
-        "kmsUoaCentralKeyId": "3cf7aeb4-ad8c-4505-a8e3-7d2a556e188d"
+        "awsApiGatewayCustomDomainName": "apigw.test.amazon.auckland.ac.nz",
+        "deploymentBucketStage": "test",
+        "cognitoUserPoolId": "ap-southeast-2_gtuqqgIIq",
+        "kmsUoaCentralKeyId": "891f7417-3a6e-4152-b6d5-c37433acae54"
     },
     "app": {
         "NODE_ENV": "test",
-        "COGNITO_DOMAIN": "uoapool-sandbox",
+        "COGNITO_DOMAIN": "uoapool-nonprod",
         "PROJECT_DB_BASE_URL": "https://api.test.auckland.ac.nz/service/eresearch-project/v1",
-        "PROJECT_DB_API_KEY": "${ssm:/dev/cer-dashboard/projectdb_apikey_test~true}",
+        "PROJECT_DB_API_KEY": "${ssm:/test/cer-dashboard/projectdb_apikey_test~true}",
         "REGROUP_V2_API_BASE_URL": "https://api.test.auckland.ac.nz/service/regroup/v2",
-        "REGROUP_V2_API_KEY": "${ssm:/dev/cer-dashboard/regroup_v2_apikey_test~true}",
+        "REGROUP_V2_API_KEY": "${ssm:/test/cer-dashboard/regroup_v2_apikey_test~true}",
         "awsApiGatewayOauthScopes": [
             "https://eresearch-dashboard.auckland.ac.nz/dashboard"
         ],
         "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*",
-        "PLAYGROUND_ENDPOINT": "http://localhost:4000/dev/graphql",
-        "DYNAMODB_TABLE_NAME": "cer-dashboard",
+        "PLAYGROUND_ENDPOINT": "",
+        "DYNAMODB_TABLE_NAME": "cer-dashboard-dev",
         "CACHE_NUMBER_OF_HOURS": "1"
     }
 }
