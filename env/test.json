@@ -13,7 +13,7 @@
         "REGROUP_V2_API_BASE_URL": "https://api.test.auckland.ac.nz/service/regroup/v2",
         "REGROUP_V2_API_KEY": "${ssm:/test/cer-dashboard/regroup_v2_apikey~true}",
         "awsApiGatewayOauthScopes": [
-            "https://eresearch-dashboard.auckland.ac.nz/dashboard"
+            "https://eresearch-dashboard-test.auckland.ac.nz/dashboard"
         ],
         "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*",
         "PLAYGROUND_ENDPOINT": "",

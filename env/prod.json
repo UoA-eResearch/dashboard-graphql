@@ -3,7 +3,7 @@
         "awsApiGatewayCustomDomainName": "apigw.prod.amazon.auckland.ac.nz",
         "deploymentBucketStage": "prod",
         "cognitoUserPoolId": "ap-southeast-2_8SJ2jkMu6",
-        "kmsUoaCentralKeyId": "180f8f50-c1f3-4b9a-b793-0fca514ab708"
+        "kmsUoaCentralKeyId": "457b5e68-e513-4b70-adf9-70eca8298d83"
     },
     "app": {
         "NODE_ENV": "production",
@@ -13,7 +13,7 @@
         "REGROUP_V2_API_BASE_URL": "https://api.auckland.ac.nz/service/regroup/v2",
         "REGROUP_V2_API_KEY": "TBD",
         "awsApiGatewayOauthScopes": [
-            "https://eresearch-dashboard.auckland.ac.nz/dashboard"
+            "https://eresearch-dashboard-prod.auckland.ac.nz/dashboard"
         ],
         "CORS_ACCESS_CONTROL_ALLOW_ORIGINS": "*",
         "PLAYGROUND_ENDPOINT": "",
