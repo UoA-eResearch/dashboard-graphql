@@ -21,7 +21,7 @@
     "easygraphql-load-tester": "^0.3.8",
     "fs-extra": "^7.0.1",
     "inquirer": "^6.2.2",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.6",
     "ora": "^3.2.0",
     "serverless-bundle": "^1.6.0",
     "serverless-domain-manager": "^4.1.1",
